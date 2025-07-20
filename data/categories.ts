@@ -22,12 +22,12 @@ export const categoryData: Record<string, any> = {
     locations: [
       {
         id: 1,
-        name: "Restaurante Maré Alta",
+        name: "Saquarema Steak House",
         description: "Especializado em frutos do mar frescos com vista para a lagoa",
-        address: "Av. Saquarema, 123 - Centro",
-        coordinates: { lat: -22.9249, lng: -42.5084 },
+        address: "R. Barão de Saquarema, 575 - Campo Aviacao, Saquarema - RJ, 28990-000",
+        coordinates: { lat: -22.931113600793356, lng: -42.496321765916484 },
         hours: "11:00 - 22:00",
-        phone: "(22) 2651-1234",
+        phone: "(22)99936799",
         rating: 4.5,
       },
       {
@@ -42,12 +42,12 @@ export const categoryData: Record<string, any> = {
       },
       {
         id: 3,
-        name: "Pizzaria Bella Vista",
-        description: "Pizzas artesanais com ingredientes locais",
+        name: "Galeto de Itaúna",
+        description: "Galeto assado com acompanhamentos típicos",
         address: "Rua das Flores, 789 - Bacaxá",
-        coordinates: { lat: -22.92, lng: -42.505 },
+        coordinates: { lat: -22.932224570663404, lng: -42.49599642011843 },
         hours: "18:00 - 23:00",
-        phone: "(22) 2651-9012",
+        phone: "(22)999909114",
         rating: 4.7,
       },
     ],
