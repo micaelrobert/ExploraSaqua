@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
+
 import {
   UtensilsCrossed,
   MapPin,
@@ -129,7 +130,7 @@ export default function HomePage() {
           <div className="flex items-center justify-center">
             <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               ExploraSaquá
-            </h1>
+            </h1> 
           </div>
         </div>
       </header>
@@ -203,6 +204,7 @@ export default function HomePage() {
           <div className="text-center">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">ExploraSaquá</h3>
             <p className="text-gray-600">Seu guia completo para descobrir o melhor de Saquarema</p>
+            <p className="text-gray-600">©Developed By Micael Robert</p>
           </div>
         </div>
       </footer>

@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "ExploraSaquá - Guia de Saquarema",
+  icons: {
+    icon: "/favicon.ico",
+  },
   description: "Descubra os melhores lugares de Saquarema com nosso guia completo para moradores e visitantes",
     generator: 'v0.dev'
 }
