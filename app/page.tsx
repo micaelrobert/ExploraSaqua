@@ -84,11 +84,11 @@ const categories = [
     description: "Cultura e entretenimento",
   },
   {
-    id: "feiras",
-    title: "Feiras e Mercados",
+    id: "lazer",
+    title: "Lazer e Compras",
     icon: Store,
     color: "from-amber-400 to-yellow-500",
-    description: "Produtos locais frescos",
+    description: "Lugares imperdíveis",
   },
   {
     id: "espacos-culturais",
