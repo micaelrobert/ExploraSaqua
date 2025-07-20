@@ -249,7 +249,8 @@ export default function CategoryPage({ params }: PageProps) {
           </div>
 
           {/* Map */}
-          <div className="lg:sticky lg:top-8" id="map-container">
+          <div className="lg:sticky lg:top-0 h-fit" id="map-container">
+
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Localização no Mapa</h2>
 
             <div
