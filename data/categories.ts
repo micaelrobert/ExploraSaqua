@@ -11,10 +11,15 @@ import {
   Store,
   Building,
   Waves,
-} from "lucide-react"
+  Heart, // Icon for Women and Children (can be changed)
+  BriefcaseBusiness, // Icon for MEI (can be changed)
+  Ambulance, // Icon for Emergencies (can be changed)
+  Swords, // Icon for Lazer e Esporte (can be changed, was Store)
+  Volleyball, // Icon for Lazer e Esporte
+  Cherry // Icon for Feiras e Produtores Rurais
+} from "lucide-react";
 
-
-export const categoryData: Record<string, any> = {
+export const categoryData = {
   restaurantes: {
     title: "Restaurantes e Lanchonetes",
     description: "Sabores únicos da região",
@@ -24,7 +29,8 @@ export const categoryData: Record<string, any> = {
       {
         id: 1,
         name: "Casa da Praia Itaúna",
-        description: "Desde 2010, o melhor ponto de encontro com o pôr do sol mais bonito de Itaúna: beach bar, restaurante, lojas e muito mais…",
+        description:
+          "Desde 2010, o melhor ponto de encontro com o pôr do sol mais bonito de Itaúna: beach bar, restaurante, lojas e muito mais…",
         address: "Av. Oceânica, 1564 - Itaúna, Saquarema - RJ, 28990-000",
         coordinates: { lat: -22.935686992870753, lng: -42.47787278596247 },
         hours: "10:00 - 12:00",
@@ -36,7 +42,8 @@ export const categoryData: Record<string, any> = {
         id: 2,
         name: "Trattoria Massas e Petiscos",
         description: "Restaurante especializado em massas e petiscos .",
-        address: "esq - Av. Saquarema, 3019, R. Ambrozina Maria Nazareth, 70 - Porto da Roça II, Saquarema - RJ, 28991-350",
+        address:
+          "esq - Av. Saquarema, 3019, R. Ambrozina Maria Nazareth, 70 - Porto da Roça II, Saquarema - RJ, 28991-350",
         coordinates: { lat: -22.93425800668675, lng: -42.49385964733131 },
         hours: "11:30 - 00:00",
         phone: "(22) 99938-3702",
@@ -47,14 +54,14 @@ export const categoryData: Record<string, any> = {
         id: 3,
         name: "Perfetto Saquarema Restaurante e Pizzaria",
         description: "Comida caseira, petiscos e drinks à beira da lagoa.",
-        address: "Tv. Prof. Alfredo Coutinho, 68 - Centro, Saquarema - RJ, 28990-792",
+        address:
+          "Tv. Prof. Alfredo Coutinho, 68 - Centro, Saquarema - RJ, 28990-792",
         coordinates: { lat: -22.934356814141044, lng: -42.493806003153495 },
         hours: "12:00 - 22:00",
         phone: "(22) 99986-1746",
         rating: 4.3,
         website: "https://www.instagram.com/perfettosaquarema/?hl=e",
       },
-    
     ],
   },
 
@@ -75,7 +82,8 @@ export const categoryData: Record<string, any> = {
       {
         id: 2,
         name: "Praia da Barrinha",
-        description: "Praia maravilhosa e tranquila. De águas claras e calmas. Ideal para curtir com crianças. E tem várias opções de bares e restaurantes aos arredores",
+        description:
+          "Praia maravilhosa e tranquila. De águas claras e calmas. Ideal para curtir com crianças. E tem várias opções de bares e restaurantes aos arredores",
         address: "R. Lagoinha - Itaúna, Saquarema - RJ, 28990-000",
         coordinates: { lat: -22.934819197484476, lng: -42.490440942327474 },
         hours: "24 horas",
@@ -88,7 +96,6 @@ export const categoryData: Record<string, any> = {
         coordinates: { lat: -22.931811102963295, lng: -42.56159646441814 },
         hours: "09:00 - 16:00",
       },
-    
     ],
   },
   trilhas: {
@@ -138,7 +145,7 @@ export const categoryData: Record<string, any> = {
         hours: "5:30 - 22:00",
         phone: "(22) 99929-8985",
         website: "http://www.academiamitra.com.br/",
-        rating: 4.6
+        rating: 4.6,
       },
       {
         id: 2,
@@ -148,7 +155,7 @@ export const categoryData: Record<string, any> = {
         coordinates: { lat: -22.90183654962015, lng: -42.476110487588436 },
         hours: "06:00 - 22:00",
         phone: "(22) 99289-8094",
-        rating: 4.7
+        rating: 4.7,
       },
     ],
   },
@@ -202,8 +209,8 @@ export const categoryData: Record<string, any> = {
         coordinates: { lat: -22.888727272260372, lng: -42.4672130142217 },
         hours: "06:00 - 20:00",
         phone: "(21) 3715-1320",
-        website:"https://redesupermarket.com.br/lojas/supermarket-bacaxa/",
-        rating: 4.1
+        website: "https://redesupermarket.com.br/lojas/supermarket-bacaxa/",
+        rating: 4.1,
       },
       {
         id: 3,
@@ -214,7 +221,7 @@ export const categoryData: Record<string, any> = {
         hours: "7:00 - 21:00",
         phone: "(22)2653-3112",
         website: "https://www.supermercadosjuzan.com.br/encartes",
-        rating: 4.3
+        rating: 4.3,
       },
     ],
   },
@@ -241,7 +248,7 @@ export const categoryData: Record<string, any> = {
         address: "Av. Itaúna, 500 - Itaúna",
         coordinates: { lat: -22.93282436079012, lng: -42.49512406519877 },
         hours: "24 horas",
-        rating: 4.3
+        rating: 4.3,
       },
     ],
   },
@@ -256,7 +263,7 @@ export const categoryData: Record<string, any> = {
         name: "Pousada Santa Mônica",
         description: "Acomodações confortáveis com vista para o oceano",
         address: "Av. Min. Salgado Filho, 2706 - Vila, Saquarema - RJ, 28990-538",
-        coordinates: { lat: -22.9322385041832, lng: -42.52114947409636},
+        coordinates: { lat: -22.9322385041832, lng: -42.52114947409636 },
         phone: "(22) 99755-9300",
         website: "http://www.pousadasantamonica.com.br/",
         rating: 4.6,
@@ -279,7 +286,7 @@ export const categoryData: Record<string, any> = {
         coordinates: { lat: -22.9361102671816, lng: -42.47513068573371 },
         phone: "(22) 2651-2389",
         rating: 4.3,
-        website: "http://www.pousadasitauna.com.br/"
+        website: "http://www.pousadasitauna.com.br/",
       },
     ],
   },
@@ -307,10 +314,10 @@ export const categoryData: Record<string, any> = {
       },
     ],
   },
-  lazer: {
-    title: "Lazer",
-    description: "Lugares imperdíveis",
-    icon: Store,
+  "lazer-e-esporte": {
+    title: "Lazer e Esporte",
+    description: "Opções para diversão e atividades físicas",
+    icon: Volleyball,
     color: "from-amber-400 to-yellow-500",
     locations: [
       {
@@ -329,13 +336,14 @@ export const categoryData: Record<string, any> = {
         name: "Cinemagic",
         description: "Cinema com várias salas e opções de filmes",
         address: "Fly Shopping - RJ-106, 51 - Bacaxá, Saquarema - RJ, 28994-816",
-        coordinates: { lat: -22.889450711190996, lng:  -42.466674945483696 },
+        coordinates: { lat: -22.889450711190996, lng: -42.466674945483696 },
         hours: "13:00 - 23:00",
         rating: 4.6,
-        phone:"(22) 99101-6538",
-        website: "https://www.veloxtickets.com/Portal/Local/Cinema/Saquarema/CM-Cinemas-Bacaxa/BCX",
+        phone: "(22) 99101-6538",
+        website:
+          "https://www.veloxtickets.com/Portal/Local/Cinema/Saquarema/CM-Cinemas-Bacaxa/BCX",
       },
-    {
+      {
         id: 3,
         name: "Objetiva",
         description: "Roupas estilosas e acessórios",
@@ -343,10 +351,9 @@ export const categoryData: Record<string, any> = {
         coordinates: { lat: -22.892955922957114, lng: -42.46842830314772 },
         hours: "09:00 - 19:00",
         rating: 4.5,
-        website:"https://site.modaobjetiva.com.br/"
+        website: "https://site.modaobjetiva.com.br/",
       },
     ],
-  
   },
   "espacos-culturais": {
     title: "Espaços Culturais",
@@ -415,4 +422,125 @@ export const categoryData: Record<string, any> = {
       },
     ],
   },
+  "mulheres-e-criancas": {
+    title: "Mulheres e Crianças",
+    description: "Apoio e serviços essenciais",
+    icon: Heart,
+    color: "from-pink-400 to-red-600",
+    locations: [
+      {
+        id: 1,
+        name: "Conselho Tutelar de Saquarema",
+        description: "Órgão que zela pelos direitos de crianças e adolescentes",
+        address: "R. Prof. Francisco Fonseca, 178 - Bacaxá, Saquarema - RJ, 28994-702",
+        coordinates: { lat: -22.893112, lng: -42.469106 },
+        hours: "08:00 - 17:00 (segunda a sexta)",
+        phone: "(22) 2653-8101",
+      },
+      {
+        id: 2,
+        name: "Delegacia Especializada de Atendimento à Mulher (DEAM)",
+        description: "Atendimento especializado para mulheres vítimas de violência",
+        address: "R. Dr. Luiz Maurício, s/n - Centro, Saquarema - RJ, 28990-000",
+        coordinates: { lat: -22.9338, lng: -42.4975 },
+        hours: "24 horas",
+        phone: "(22) 2651-1234",
+      },
+    ],
+  },
+  mei: {
+    title: "MEI",
+    description: "Apoio ao Microempreendedor Individual",
+    icon: BriefcaseBusiness,
+    color: "from-green-500 to-lime-600",
+    locations: [
+      {
+        id: 1,
+        name: "Sala do Empreendedor Saquarema",
+        description: "Oferece suporte e orientação para microempreendedores individuais",
+        address: "R. Barão de Saquarema, 123 - Centro, Saquarema - RJ, 28990-000",
+        coordinates: { lat: -22.9345, lng: -42.4950 },
+        hours: "09:00 - 17:00 (segunda a sexta)",
+        phone: "(22) 2651-4567",
+      },
+      {
+        id: 2,
+        name: "SEBRAE Saquarema",
+        description: "Serviço Brasileiro de Apoio às Micro e Pequenas Empresas",
+        address: "Av. Saquarema, 2000 - Porto da Roça, Saquarema - RJ, 28991-350",
+        coordinates: { lat: -22.9280, lng: -42.4850 },
+        hours: "09:00 - 17:00 (segunda a sexta)",
+        phone: "(22) 2653-7890",
+      },
+    ],
+  },
+  emergencias: {
+    title: "Emergências",
+    description: "Serviços de emergência e utilidade pública",
+    icon: Ambulance,
+    color: "from-red-600 to-rose-700",
+    locations: [
+      {
+        id: 1,
+        name: "Hospital Municipal de Saquarema",
+        description: "Hospital com atendimento de emergência 24 horas",
+        address: "Av. Saquarema, 1000 - Centro, Saquarema - RJ, 28990-000",
+        coordinates: { lat: -22.9300, lng: -42.4900 },
+        hours: "24 horas",
+        phone: "(22) 2651-1234",
+      },
+      {
+        id: 2,
+        name: "Corpo de Bombeiros Saquarema",
+        description: "Serviço de combate a incêndios e resgate",
+        address: "R. Dr. Luiz Maurício, s/n - Centro, Saquarema - RJ, 28990-000",
+        coordinates: { lat: -22.9335, lng: -42.4980 },
+        hours: "24 horas",
+        phone: "193",
+      },
+      {
+        id: 3,
+        name: "Polícia Militar Saquarema",
+        description: "Segurança pública e atendimento a ocorrências",
+        address: "Praça do Artesanato, s/n - Centro, Saquarema - RJ, 28990-000",
+        coordinates: { lat: -22.9340, lng: -42.4960 },
+        hours: "24 horas",
+        phone: "190",
+      },
+    ],
+  },
+  feiras: {
+    title: "Feiras e Produtores Rurais",
+    icon: Cherry,
+    color: "from-green-400 to-lime-300",
+    description: "Serviços de saúde e bem-estar",
+  
+    locations: [      {
+        id: 1,
+        name: "A adicionar Feira de Saquarema",
+        description: "Hospital com atendimento de emergência 24 horas",
+        address: "Av. Saquarema, 1000 - Centro, Saquarema - RJ, 28990-000",
+        coordinates: { lat: -22.9300, lng: -42.4900 },
+        hours: "24 horas",
+        phone: "(22) 2651-1234",
+      },
+      {
+        id: 2,
+        name: "A adicionar Feira de Saquarema",
+        description: "Serviço de combate a incêndios e resgate",
+        address: "R. Dr. Luiz Maurício, s/n - Centro, Saquarema - RJ, 28990-000",
+        coordinates: { lat: -22.9335, lng: -42.4980 },
+        hours: "24 horas",
+        phone: "193",
+      },
+      {
+        id: 3,
+        name: "A adicionar Feira de Saquarema",
+        description: "Segurança pública e atendimento a ocorrências",
+        address: "Praça do Artesanato, s/n - Centro, Saquarema - RJ, 28990-000",
+        coordinates: { lat: -22.9340, lng: -42.4960 },
+        hours: "24 horas",
+        phone: "190",
+      },]
+}
 }

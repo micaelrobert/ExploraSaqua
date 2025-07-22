@@ -118,7 +118,7 @@ export default function CategoryPage({ params }: PageProps) {
     }
   }
 
-  const category = categoryData[params.slug]
+  const category = categoryData[params.slug as keyof typeof categoryData]
 
   if (!category) {
     return (

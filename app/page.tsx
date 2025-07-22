@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import Link from "next/link"
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 import {
   UtensilsCrossed,
@@ -14,10 +14,15 @@ import {
   Bus,
   Hotel,
   Calendar,
-  Store,
   Building,
   Waves,
-} from "lucide-react"
+  Heart, 
+  BriefcaseBusiness, 
+  Ambulance, 
+  Volleyball, 
+  Cherry
+  
+} from "lucide-react";
 
 const categories = [
   {
@@ -84,11 +89,11 @@ const categories = [
     description: "Cultura e entretenimento",
   },
   {
-    id: "lazer",
-    title: "Lazer e Compras",
-    icon: Store,
+    id: "lazer-e-esporte",
+    title: "Lazer e Esporte",
+    icon: Volleyball,
     color: "from-amber-400 to-yellow-500",
-    description: "Lugares imperdíveis",
+    description: "Opções para diversão e atividades físicas",
   },
   {
     id: "espacos-culturais",
@@ -104,36 +109,86 @@ const categories = [
     color: "from-teal-400 to-cyan-500",
     description: "Paraíso natural",
   },
-]
+  {
+    id: "mulheres-e-criancas",
+    title: "Mulheres e Crianças",
+    icon: Heart,
+    color: "from-pink-400 to-red-600",
+    description: "Apoio e serviços essenciais",
+  },
+  {
+    id: "mei",
+    title: "MEI",
+    icon: BriefcaseBusiness,
+    color: "from-green-500 to-lime-600",
+    description: "Apoio ao Microempreendedor Individual",
+  },
+  {
+    id: "emergencias",
+    title: "Emergências",
+    icon: Ambulance,
+    color: "from-red-600 to-rose-700",
+    description: "Serviços de emergência e utilidade pública",
+  },
+  {
+    id: "feiras",
+    title: "Feiras e Produtores Rurais",
+    icon: Cherry,
+    color: "from-green-400 to-lime-300",
+    description: "Serviços de saúde e bem-estar",
+  }
+  
+];
 
 export default function HomePage() {
-  const [visibleCards, setVisibleCards] = useState(0)
+  const [visibleCards, setVisibleCards] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setVisibleCards((prev) => {
         if (prev < categories.length) {
-          return prev + 1
+          return prev + 1;
         }
-        return prev
-      })
-    }, 150)
+        return prev;
+      });
+    }, 150);
 
-    return () => clearInterval(timer)
-  }, [])
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
-      {/* Header */}
+    {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-center">
-            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              ExploraSaquá
-            </h1> 
-          </div>
+        <div className="relative container mx-auto px-4 py-3 sm:py-4 md:py-5 flex items-center justify-between">
+
+          {/* Logo responsiva e à esquerda */}
+          <img
+            src="/logosq.png"
+            alt="Logo ExploraSaquá"
+            // Esconde a logo por padrão (mobile) e a mostra e aumenta a partir de 'md'
+            className="hidden md:block h-16 lg:h-20 w-auto absolute left-4 top-1/2 -translate-y-1/2"
+          />
+
+          {/* Título centralizado, ajustando para a presença do logo */}
+          <h1 className="
+              text-xl sm:text-2xl md:text-3xl lg:text-4xl // Ajustando o tamanho do texto para telas maiores
+              font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent 
+              text-center 
+              absolute left-1/2 -translate-x-1/2
+          ">
+            ExploraSaquá
+          </h1>
+
+          {/*elemento vazio para equilibrar o espaço*/}
+          {/* Este div ainda é útil para manter o h1 centralizado quando a logo está oculta em telas menores */}
+          <div className="h-8 sm:h-10 md:h-12 w-8 sm:w-10 md:w-12"></div>
         </div>
       </header>
+
+
+
+
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-12 md:py-20">
@@ -145,23 +200,30 @@ export default function HomePage() {
         >
           <h2 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
             O que você quer{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">explorar</span>{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              explorar
+            </span>{" "}
             hoje?
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Descubra os melhores lugares de Saquarema com nosso guia completo para moradores e visitantes
+            Descubra os melhores lugares de Saquarema com nosso guia completo
+            para moradores e visitantes
           </p>
         </motion.div>
 
         {/* Categories Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {categories.map((category, index) => {
-            const Icon = category.icon
+            const Icon = category.icon;
             return (
               <motion.div
                 key={category.id}
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={index < visibleCards ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 50, scale: 0.9 }}
+                animate={
+                  index < visibleCards
+                    ? { opacity: 1, y: 0, scale: 1 }
+                    : { opacity: 0, y: 50, scale: 0.9 }
+                }
                 transition={{
                   duration: 0.5,
                   delay: index * 0.1,
@@ -170,7 +232,8 @@ export default function HomePage() {
                 }}
               >
                 <Link href={`/categoria/${category.id}`}>
-                  <div className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer">
+                  <div className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer flex flex-col justify-between min-h-[220px]">
+
                     <div
                       className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
                     />
@@ -186,14 +249,16 @@ export default function HomePage() {
                         {category.title}
                       </h3>
 
-                      <p className="text-gray-600 text-sm">{category.description}</p>
+                      <p className="text-gray-600 text-sm">
+                        {category.description}
+                      </p>
                     </div>
 
                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent group-hover:via-blue-400 transition-all duration-300" />
                   </div>
                 </Link>
               </motion.div>
-            )
+            );
           })}
         </div>
       </section>
@@ -202,12 +267,20 @@ export default function HomePage() {
       <footer className="bg-gray-50 border-t border-gray-200 mt-20">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">ExploraSaquá</h3>
-            <p className="text-gray-600">Seu guia completo para descobrir o melhor de Saquarema</p>
-            <p className="text-gray-600">©Developed By Micael Robert</p>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              ExploraSaquá
+            </h3>
+            <p className="text-gray-600 mb-4"> {/* Adicionei mb-4 aqui para espaçar o parágrafo de descrição */}
+              Seu guia completo para descobrir o melhor de Saquarema
+            </p>
+            {/* Linha horizontal sutil */}
+            <hr className="w-16 mx-auto border-gray-300 mb-4" /> {/* Adiciona uma linha divisória curta e centralizada */}
+            <p className="text-gray-500 text-sm"> {/* Mudado para text-gray-500 e text-sm para ser mais discreto */}
+              © Desenvolvido por <span className="font-medium text-gray-600">Micael Robert</span> {/* Destaque o nome */}
+            </p>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }
