@@ -11,7 +11,7 @@ import {
 } from "lucide-react"
 import dynamic from "next/dynamic"
 import { db } from "../../firebase" 
-import { collection, getDocs } from "firebase/firestore"
+import { collection, getDocs, query, where } from "firebase/firestore" // Importar 'query' e 'where'
 import { useMap } from "react-leaflet"
 
 import { categories } from "../../page"; 
@@ -63,10 +63,39 @@ export default function CategoryPage({ params }: PageProps) {
     }
   }, [isClient])
 
+  // Função auxiliar para normalizar strings (converter para slug-like)
+  const normalizeString = (str: string) => {
+    return str
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]+/g, "")
+      .replace(/--+/g, "-");
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const querySnapshot = await getDocs(collection(db, "locations"));
+
+      // Encontra o título original da categoria para usar na consulta
+      const categoryInfo = categories.find(cat => cat.id === params.slug);
+      let categoryTitle = categoryInfo ? categoryInfo.title : '';
+
+      // Se não encontrar a categoria ou o título, não faz a consulta
+      if (!categoryTitle) {
+        console.warn(`Categoria '${params.slug}' não encontrada ou sem título correspondente.`);
+        setLocations([]);
+        setIsLoading(false);
+        return;
+      }
+
+      // Constrói a consulta otimizada para buscar apenas os documentos da categoria específica
+      const locationsRef = collection(db, "locations");
+      const q = query(locationsRef, where("category", "==", categoryTitle)); // Consulta otimizada
+
+      const querySnapshot = await getDocs(q); // Executa a consulta
+
       const data = querySnapshot.docs.map((doc) => {
         const docData = doc.data();
         let parsedCoordinates = null;
@@ -89,24 +118,8 @@ export default function CategoryPage({ params }: PageProps) {
           coordinates: parsedCoordinates,
         };
       });
-
-      // Normaliza a string da categoria para comparar com o slug da URL
-      const normalizeString = (str: string) => {
-        return str
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace(/\s+/g, "-")
-          .replace(/[^\w-]+/g, "")
-          .replace(/--+/g, "-");
-      };
-
-      const filtered = data.filter((item: any) => {
-        const itemCategoryNormalized = normalizeString(item.category || '');
-        return itemCategoryNormalized === params.slug;
-      });
       
-      setLocations(filtered);
+      setLocations(data); // 'data' já contém apenas os itens filtrados pelo Firestore
       setIsLoading(false);
     };
     fetchData();
