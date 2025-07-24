@@ -23,7 +23,7 @@ import {
   Cherry
   
 } from "lucide-react";
-
+export {categories}
 const categories = [
   {
     id: "restaurantes",
