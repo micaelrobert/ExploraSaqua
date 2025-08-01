@@ -313,19 +313,28 @@ export default function CategoryPage({ params }: PageProps) {
                         position={[location.coordinates.lat, location.coordinates.lng]}
                         eventHandlers={{ click: () => setSelectedLocation(location) }}
                       >
-                        <Popup>
-                          <div className="p-2 min-w-[200px]">
-                            <h3 className="font-semibold text-gray-800 mb-1">{location.name}</h3>
-                            <p className="text-sm text-gray-600 mb-2">{location.description}</p>
-                            <p className="text-xs text-gray-500 mb-2">{location.address}</p>
-                            {location.rating && (
-                              <div className="flex items-center gap-1">
-                                <span className="text-yellow-500 text-sm">★</span>
-                                <span className="text-sm text-gray-600">{location.rating}</span>
-                              </div>
-                            )}
-                          </div>
-                        </Popup>
+                      <Popup>
+                        <div className="p-2 min-w-[200px]">
+                          <h3 className="font-semibold text-gray-800 mb-1">{location.name}</h3>
+                          <p className="text-sm text-gray-600 mb-2">{location.description}</p>
+                          <p className="text-xs text-gray-500 mb-2">{location.address}</p>
+                          {location.rating && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-yellow-500 text-sm">★</span>
+                              <span className="text-sm text-gray-600">{location.rating}</span>
+                            </div>
+                          )}
+                          <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${location.coordinates.lat},${location.coordinates.lng}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 inline-block text-sm text-blue-600 hover:underline"
+                          >
+                            Abrir no Maps
+                          </a>
+                        </div>
+                      </Popup>
+
                       </Marker>
                     ) : null
                   ))}
