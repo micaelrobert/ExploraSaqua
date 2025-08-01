@@ -171,14 +171,14 @@ export default function HomePage() {
           />
 
           {/* Título centralizado, ajustando para a presença do logo */}
-          <h1 className="
-              text-xl sm:text-2xl md:text-3xl lg:text-4xl // Ajustando o tamanho do texto para telas maiores
-              font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent 
+            <h1 className="
+              text-xl sm:text-2xl md:text-3xl lg:text-4xl
+              font-bold bg-gradient-to-r from-[#017DB9] to-[#007a73] bg-clip-text text-transparent 
               text-center 
               absolute left-1/2 -translate-x-1/2
-          ">
-            ExploraSaquá
-          </h1>
+            ">
+              ExploraSaquá
+            </h1>
 
           {/*elemento vazio para equilibrar o espaço*/}
           {/* Este div ainda é útil para manter o h1 centralizado quando a logo está oculta em telas menores */}
@@ -200,7 +200,7 @@ export default function HomePage() {
         >
           <h2 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
             O que você quer{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#017DB9] to-[#007a73] bg-clip-text text-transparent">
               explorar
             </span>{" "}
             hoje?
@@ -270,13 +270,13 @@ export default function HomePage() {
             <h3 className="text-lg font-semibold text-gray-800 mb-2">
               ExploraSaquá
             </h3>
-            <p className="text-gray-600 mb-4"> {/* Adicionei mb-4 aqui para espaçar o parágrafo de descrição */}
+            <p className="text-gray-600 mb-4"> {/* mb-4 aqui para espaçar o parágrafo de descrição */}
               Seu guia completo para descobrir o melhor de Saquarema
             </p>
             {/* Linha horizontal sutil */}
-            <hr className="w-16 mx-auto border-gray-300 mb-4" /> {/* Adiciona uma linha divisória curta e centralizada */}
-            <p className="text-gray-500 text-sm"> {/* Mudado para text-gray-500 e text-sm para ser mais discreto */}
-              © Desenvolvido por <span className="font-medium text-gray-600">Micael Robert</span> {/* Destaque o nome */}
+            <hr className="w-16 mx-auto border-gray-300 mb-4" /> {/*  uma linha divisória curta e centralizada */}
+            <p className="text-gray-500 text-sm"> 
+              © Desenvolvido por <span className="font-medium text-gray-600">Micael Robert</span> 
             </p>
           </div>
         </div>
