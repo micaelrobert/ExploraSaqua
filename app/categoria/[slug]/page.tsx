@@ -4,16 +4,12 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { 
-  ArrowLeft, Clock, MapPin, Phone, Globe,
-  UtensilsCrossed, Mountain, Dumbbell, GraduationCap, ShoppingCart, 
-  Bus, Hotel, Calendar, Building, Waves, Heart, BriefcaseBusiness, 
-  Ambulance, Volleyball, Cherry
+  ArrowLeft, Clock, MapPin, Phone, Globe, Search // Ícone de busca importado
 } from "lucide-react"
 import dynamic from "next/dynamic"
 import { db } from "../../firebase" 
-import { collection, getDocs, query, where } from "firebase/firestore" // Importar 'query' e 'where'
+import { collection, getDocs, query, where } from "firebase/firestore"
 import { useMap } from "react-leaflet"
-
 import { categories } from "../../page"; 
 
 const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), { ssr: false })
@@ -44,6 +40,9 @@ export default function CategoryPage({ params }: PageProps) {
   const [mapZoom, setMapZoom] = useState(13)
   const [mapInstance, setMapInstance] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true);
+  
+  // NOVO: Estado para o termo de busca
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     setIsClient(true)
@@ -63,26 +62,13 @@ export default function CategoryPage({ params }: PageProps) {
     }
   }, [isClient])
 
-  // Função auxiliar para normalizar strings (converter para slug-like)
-  const normalizeString = (str: string) => {
-    return str
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/[^\w-]+/g, "")
-      .replace(/--+/g, "-");
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
 
-      // Encontra o título original da categoria para usar na consulta
       const categoryInfo = categories.find(cat => cat.id === params.slug);
       let categoryTitle = categoryInfo ? categoryInfo.title : '';
 
-      // Se não encontrar a categoria ou o título, não faz a consulta
       if (!categoryTitle) {
         console.warn(`Categoria '${params.slug}' não encontrada ou sem título correspondente.`);
         setLocations([]);
@@ -90,17 +76,15 @@ export default function CategoryPage({ params }: PageProps) {
         return;
       }
 
-      // Constrói a consulta otimizada para buscar apenas os documentos da categoria específica
       const locationsRef = collection(db, "locations");
-      const q = query(locationsRef, where("category", "==", categoryTitle)); // Consulta otimizada
+      const q = query(locationsRef, where("category", "==", categoryTitle));
 
-      const querySnapshot = await getDocs(q); // Executa a consulta
+      const querySnapshot = await getDocs(q);
 
       const data = querySnapshot.docs.map((doc) => {
         const docData = doc.data();
         let parsedCoordinates = null;
 
-        // Tenta fazer o parse das coordenadas se for uma string JSON
         if (typeof docData.coordinates === 'string') {
           try {
             parsedCoordinates = JSON.parse(docData.coordinates);
@@ -119,7 +103,7 @@ export default function CategoryPage({ params }: PageProps) {
         };
       });
       
-      setLocations(data); // 'data' já contém apenas os itens filtrados pelo Firestore
+      setLocations(data);
       setIsLoading(false);
     };
     fetchData();
@@ -127,7 +111,6 @@ export default function CategoryPage({ params }: PageProps) {
 
   const focusOnLocation = (location: any) => {
     setSelectedLocation(location)
-    // Verifica se as coordenadas são válidas antes de centralizar o mapa
     if (location.coordinates && typeof location.coordinates.lat === 'number' && typeof location.coordinates.lng === 'number') {
       const newCenter: [number, number] = [location.coordinates.lat, location.coordinates.lng]
       setMapCenter(newCenter)
@@ -160,10 +143,13 @@ export default function CategoryPage({ params }: PageProps) {
     }
   }
 
-  // Busca a informação da categoria no array local 'categories'
   const category = categories.find(cat => cat.id === params.slug);
 
-  // Exibe mensagem de categoria não encontrada se o slug não corresponder
+  // NOVO: Filtra os locais com base no termo de busca
+  const filteredLocations = locations.filter(location =>
+    location.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (!category) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -177,7 +163,6 @@ export default function CategoryPage({ params }: PageProps) {
     );
   }
 
-  // Exibe o carregamento enquanto os dados são buscados do Firestore
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -189,7 +174,6 @@ export default function CategoryPage({ params }: PageProps) {
     );
   }
 
-  // Exibe mensagem se nenhum local for encontrado após o carregamento
   if (!locations || locations.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -201,20 +185,18 @@ export default function CategoryPage({ params }: PageProps) {
     )
   }
 
-  // Componente do ícone da categoria
   const CategoryIcon = category.icon;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#017DB9] via-white to-[#007a73]">
       <header className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-3 py-4">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors">
               <ArrowLeft className="w-5 h-5" />
               Voltar
             </Link>
             <div className="flex items-center gap-3">
-              {/* Renderiza o ícone e a cor da categoria */}
               <div className={`p-2 rounded-lg bg-gradient-to-br ${category.color}`}>
                 <CategoryIcon className="w-6 h-6 text-white" />
               </div>
@@ -231,8 +213,8 @@ export default function CategoryPage({ params }: PageProps) {
 
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col">
+            <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold text-gray-800">Locais Recomendados</h2>
               {selectedLocation && (
                 <button onClick={resetMapView} className="text-sm text-blue-600 hover:text-blue-800">
@@ -241,49 +223,73 @@ export default function CategoryPage({ params }: PageProps) {
               )}
             </div>
 
-            {locations.map((location: any, index: number) => (
-              <motion.div
-                key={location.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`bg-white rounded-xl shadow-md p-6 cursor-pointer transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 ${
-                  selectedLocation?.id === location.id ? "ring-2 ring-blue-500 shadow-lg" : ""
-                }`}
-                onClick={() => focusOnLocation(location)}
-              >
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-lg font-semibold text-gray-800">{location.name}</h3>
-                  <div className="flex items-center gap-2">
-                    {location.rating && (
-                      <div className="flex items-center gap-1">
-                        <span className="text-yellow-500">★</span>
-                        <span className="text-sm text-gray-600">{location.rating}</span>
+            {/*Barra de Pesquisa */}
+            <div className="relative mb-6">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+              <input
+                type="text"
+                placeholder="Pesquisar por nome..."
+                className="
+                  w-full pl-12 pr-4 py-3
+                  rounded-2xl border border-gray-200 bg-white shadow-sm
+                  focus:outline-none focus:ring-2 focus:ring-[#017DB9] focus:border-transparent
+                  transition-all duration-300 placeholder-gray-400 text-sm
+                  hover:shadow-md
+                "
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+
+            {/*Contêiner com Barra de Rolagem */}
+            <div className="space-y-4 max-h-[65vh] overflow-y-auto px-4">
+              {filteredLocations.map((location: any, index: number) => (
+                <motion.div
+                  key={location.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  //Cor de seleção do card 
+                  className={`bg-white rounded-xl shadow-md p-6 cursor-pointer transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 ${
+                    selectedLocation?.id === location.id ? "ring-2 ring-offset-2 ring-[#017DB9] shadow-lg" : ""
+                  }`}
+                  onClick={() => focusOnLocation(location)}
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-lg font-semibold text-gray-800">{location.name}</h3>
+                    <div className="flex items-center gap-2">
+                      {location.rating && (
+                        <div className="flex items-center gap-1">
+                          <span className="text-yellow-500">★</span>
+                          <span className="text-sm text-gray-600">{location.rating}</span>
+                        </div>
+                      )}
+                      {/* NOVO: Indicador de seleção atualizado */}
+                      {selectedLocation?.id === location.id && (
+                        <div className="w-2 h-2 bg-[#017DB9] rounded-full animate-pulse"></div>
+                      )}
+                    </div>
+                  </div>
+
+                  <p className="text-gray-600 mb-4">{location.description}</p>
+
+                  <div className="space-y-2 text-sm text-gray-500">
+                    <div className="flex items-center gap-2"><MapPin className="w-4 h-4" />{location.address}</div>
+                    {location.hours && <div className="flex items-center gap-2"><Clock className="w-4 h-4" />{location.hours}</div>}
+                    {location.phone && <div className="flex items-center gap-2"><Phone className="w-4 h-4" />{location.phone}</div>}
+                    {location.website && (
+                      <div className="flex items-center gap-2">
+                        <Globe className="w-4 h-4" />
+                        <a href={location.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800" onClick={(e) => e.stopPropagation()}>
+                          Visitar site
+                        </a>
                       </div>
                     )}
-                    {selectedLocation?.id === location.id && (
-                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                    )}
                   </div>
-                </div>
-
-                <p className="text-gray-600 mb-4">{location.description}</p>
-
-                <div className="space-y-2 text-sm text-gray-500">
-                  <div className="flex items-center gap-2"><MapPin className="w-4 h-4" />{location.address}</div>
-                  {location.hours && <div className="flex items-center gap-2"><Clock className="w-4 h-4" />{location.hours}</div>}
-                  {location.phone && <div className="flex items-center gap-2"><Phone className="w-4 h-4" />{location.phone}</div>}
-                  {location.website && (
-                    <div className="flex items-center gap-2">
-                      <Globe className="w-4 h-4" />
-                      <a href={location.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800" onClick={(e) => e.stopPropagation()}>
-                        Visitar site
-                      </a>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           <div className="lg:sticky lg:top-0 h-fit" id="map-container">
@@ -306,35 +312,34 @@ export default function CategoryPage({ params }: PageProps) {
                     tileSize={256}
                   />
 
-                  {locations.map((location) => (
+                  {filteredLocations.map((location) => ( // Mostra no mapa apenas os locais filtrados
                     location.coordinates && typeof location.coordinates.lat === 'number' && typeof location.coordinates.lng === 'number' ? (
                       <Marker
                         key={location.id}
                         position={[location.coordinates.lat, location.coordinates.lng]}
                         eventHandlers={{ click: () => setSelectedLocation(location) }}
                       >
-                      <Popup>
-                        <div className="p-2 min-w-[200px]">
-                          <h3 className="font-semibold text-gray-800 mb-1">{location.name}</h3>
-                          <p className="text-sm text-gray-600 mb-2">{location.description}</p>
-                          <p className="text-xs text-gray-500 mb-2">{location.address}</p>
-                          {location.rating && (
-                            <div className="flex items-center gap-1">
-                              <span className="text-yellow-500 text-sm">★</span>
-                              <span className="text-sm text-gray-600">{location.rating}</span>
-                            </div>
-                          )}
-                          <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${location.coordinates.lat},${location.coordinates.lng}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-2 inline-block text-sm text-blue-600 hover:underline"
-                          >
-                            Abrir no Maps
-                          </a>
-                        </div>
-                      </Popup>
-
+                        <Popup>
+                          <div className="p-2 min-w-[200px]">
+                            <h3 className="font-semibold text-gray-800 mb-1">{location.name}</h3>
+                            <p className="text-sm text-gray-600 mb-2">{location.description}</p>
+                            <p className="text-xs text-gray-500 mb-2">{location.address}</p>
+                            {location.rating && (
+                              <div className="flex items-center gap-1">
+                                <span className="text-yellow-500 text-sm">★</span>
+                                <span className="text-sm text-gray-600">{location.rating}</span>
+                              </div>
+                            )}
+                            <a
+                              href={`https://www.google.com/maps/search/?api=1&query=${location.coordinates.lat},${location.coordinates.lng}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="mt-2 inline-block text-sm text-blue-600 hover:underline"
+                            >
+                              Abrir no Maps
+                            </a>
+                          </div>
+                        </Popup>
                       </Marker>
                     ) : null
                   ))}

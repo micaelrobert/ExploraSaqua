@@ -20,7 +20,8 @@ import {
   BriefcaseBusiness, 
   Ambulance, 
   Volleyball, 
-  Cherry
+  Cherry,
+  Search
   
 } from "lucide-react";
 export {categories}
@@ -117,11 +118,11 @@ const categories = [
     description: "Apoio e serviços essenciais",
   },
   {
-    id: "mei",
-    title: "MEI",
+    id: "compras",
+    title: "Compras",
     icon: BriefcaseBusiness,
-    color: "from-green-500 to-lime-600",
-    description: "Apoio ao Microempreendedor Individual",
+    color: "from-gray-400 to-gray-500",
+    description: "Melhores lojas e serviços",
   },
   {
     id: "emergencias",
@@ -155,9 +156,10 @@ export default function HomePage() {
 
     return () => clearInterval(timer);
   }, []);
+    const [searchTerm, setSearchTerm] = useState("");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#017DB9] via-white to-[#007a73]">
     {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-50">
         <div className="relative container mx-auto px-4 py-3 sm:py-4 md:py-5 flex items-center justify-between">
@@ -186,9 +188,14 @@ export default function HomePage() {
         </div>
       </header>
 
-
-
-
+      {/* imagem como banner com efeito fade na parte inferior */}
+      <div className="relative w-full h-[400px] overflow-hidden">
+        <img
+          src="/saquarema.jpeg"
+          alt="Vista de Saquarema"
+          className="w-full h-full object-cover opacity-90 fade-bottom-mask"
+        />
+      </div>
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-12 md:py-20">
@@ -209,11 +216,33 @@ export default function HomePage() {
             Descubra os melhores lugares de Saquarema com nosso guia completo
             para moradores e visitantes
           </p>
+          <div className="max-w-md mx-auto mt-8">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+            <input
+              type="text"
+              placeholder="Pesquisar por categoria..."
+              className="
+                w-full pl-12 pr-4 py-3
+                rounded-2xl border border-gray-200 bg-white shadow-sm
+                focus:outline-none focus:ring-2 focus:ring-[#017DB9] focus:border-transparent
+                transition-all duration-300 placeholder-gray-400 text-sm
+                hover:shadow-md
+              "
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
         </motion.div>
 
         {/* Categories Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          {categories.map((category, index) => {
+         {categories
+          .filter((category) =>
+            category.title.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+          .map((category, index) => {
             const Icon = category.icon;
             return (
               <motion.div
