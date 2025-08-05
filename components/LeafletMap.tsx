@@ -1,7 +1,25 @@
 "use client"
-
+import L from "leaflet"
 import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
+
+const defaultIcon = new L.Icon({
+  iconUrl: "/marker-icon-blue.png",
+  shadowUrl: "/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+})
+
+const selectedIcon = new L.Icon({
+  iconUrl: "/marker-icon-red.png",
+  shadowUrl: "/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+})
 
 const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), {
   ssr: false,
@@ -33,6 +51,8 @@ interface LeafletMapProps {
 
 export default function LeafletMap({ locations }: LeafletMapProps) {
   const [isClient, setIsClient] = useState(false)
+  const [selectedLocationId, setSelectedLocationId] = useState<number | null>(null)
+
 
   useEffect(() => {
     setIsClient(true)
@@ -62,14 +82,25 @@ export default function LeafletMap({ locations }: LeafletMapProps) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {locations.map((location) => (
-          <Marker key={location.id} position={[location.coordinates.lat, location.coordinates.lng]}>
-            <Popup>
-              <div className="p-2">
-                <h3 className="font-semibold text-gray-800 mb-1">{location.name}</h3>
-                <p className="text-sm text-gray-600 mb-2">{location.description}</p>
-                <p className="text-xs text-gray-500">{location.address}</p>
-              </div>
+      {locations.map((location) => (
+        <Marker
+          key={location.id}
+          position={[location.coordinates.lat, location.coordinates.lng]}
+          icon={selectedLocationId === location.id ? selectedIcon : defaultIcon}
+          eventHandlers={{
+            click: () => setSelectedLocationId(location.id),
+          }}
+        >
+          <Popup
+            eventHandlers={{
+              remove: () => setSelectedLocationId(null),
+            }}
+          >
+            <div className="p-2">
+              <h3 className="font-semibold text-gray-800 mb-1">{location.name}</h3>
+              <p className="text-sm text-gray-600 mb-2">{location.description}</p>
+              <p className="text-xs text-gray-500">{location.address}</p>
+            </div>
             </Popup>
           </Marker>
         ))}

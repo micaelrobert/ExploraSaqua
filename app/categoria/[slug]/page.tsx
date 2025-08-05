@@ -1,5 +1,4 @@
 "use client"
-
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
@@ -11,6 +10,30 @@ import { db } from "../../firebase"
 import { collection, getDocs, query, where } from "firebase/firestore"
 import { useMap } from "react-leaflet"
 import { categories } from "../../page"; 
+import { useRef } from "react";
+import L from "leaflet"
+
+
+
+
+
+const defaultIcon = new L.Icon({
+  iconUrl: "/marker-icon-blue.png",
+  shadowUrl: "/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+})
+
+const selectedIcon = new L.Icon({
+  iconUrl: "/marker-icon-red.png",
+  shadowUrl: "/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+})
 
 const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), { ssr: false })
 const TileLayer = dynamic(() => import("react-leaflet").then((mod) => mod.TileLayer), { ssr: false })
@@ -40,7 +63,7 @@ export default function CategoryPage({ params }: PageProps) {
   const [mapZoom, setMapZoom] = useState(13)
   const [mapInstance, setMapInstance] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true);
-  
+  const markerRefs = useRef<Record<string, L.Marker>>( {} );
   // NOVO: Estado para o termo de busca
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -217,7 +240,7 @@ export default function CategoryPage({ params }: PageProps) {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-bold text-gray-800">Locais Recomendados</h2>
               {selectedLocation && (
-                <button onClick={resetMapView} className="text-sm text-blue-600 hover:text-blue-800">
+                <button onClick={resetMapView} className="text-sm text-blue-600 hover:text-blue-800 underline">
                   Ver todos no mapa
                 </button>
               )}
@@ -312,37 +335,65 @@ export default function CategoryPage({ params }: PageProps) {
                     tileSize={256}
                   />
 
-                  {filteredLocations.map((location) => ( // Mostra no mapa apenas os locais filtrados
-                    location.coordinates && typeof location.coordinates.lat === 'number' && typeof location.coordinates.lng === 'number' ? (
-                      <Marker
-                        key={location.id}
-                        position={[location.coordinates.lat, location.coordinates.lng]}
-                        eventHandlers={{ click: () => setSelectedLocation(location) }}
+            {filteredLocations.map((location) => {
+              const position: [number, number] = [
+                location.coordinates.lat,
+                location.coordinates.lng,
+              ];
+
+              return (
+                <Marker
+                  key={location.id}
+                  position={position}
+                  icon={
+                    selectedLocation?.id === location.id ? selectedIcon : defaultIcon
+                  }
+                  eventHandlers={{
+                    click: () => {
+                      setSelectedLocation(location);
+
+                      // Aguarda o DOM atualizar antes de abrir o popup
+                      setTimeout(() => {
+                        const marker = markerRefs.current[location.id];
+                        if (marker) marker.openPopup();
+                      }, 0);
+                    },
+                  }}
+                  ref={(ref) => {
+                    if (ref) markerRefs.current[location.id] = ref;
+                  }}
+                >
+                  <Popup
+                    autoPan={true}
+                    eventHandlers={{
+                      remove: () => setSelectedLocation(null),
+                    }}
+                  >
+                    <div className="p-2 min-w-[200px]">
+                      <h3 className="font-semibold text-gray-800 mb-1">{location.name}</h3>
+                      <p className="text-sm text-gray-600 mb-2">{location.description}</p>
+                      <p className="text-xs text-gray-500 mb-2">{location.address}</p>
+                      {location.rating && (
+                        <div className="flex items-center gap-1">
+                          <span className="text-yellow-500 text-sm">★</span>
+                          <span className="text-sm text-gray-600">{location.rating}</span>
+                        </div>
+                      )}
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${location.coordinates.lat},${location.coordinates.lng}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 inline-block text-sm text-blue-600 hover:underline"
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        <Popup>
-                          <div className="p-2 min-w-[200px]">
-                            <h3 className="font-semibold text-gray-800 mb-1">{location.name}</h3>
-                            <p className="text-sm text-gray-600 mb-2">{location.description}</p>
-                            <p className="text-xs text-gray-500 mb-2">{location.address}</p>
-                            {location.rating && (
-                              <div className="flex items-center gap-1">
-                                <span className="text-yellow-500 text-sm">★</span>
-                                <span className="text-sm text-gray-600">{location.rating}</span>
-                              </div>
-                            )}
-                            <a
-                              href={`https://www.google.com/maps/search/?api=1&query=${location.coordinates.lat},${location.coordinates.lng}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="mt-2 inline-block text-sm text-blue-600 hover:underline"
-                            >
-                              Abrir no Maps
-                            </a>
-                          </div>
-                        </Popup>
-                      </Marker>
-                    ) : null
-                  ))}
+                        Abrir no Maps
+                      </a>
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            })}
+
                   <MapInstanceHandler onMapReady={setMapInstance} />
                 </MapContainer>
               ) : (
