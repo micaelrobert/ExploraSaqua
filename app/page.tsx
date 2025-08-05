@@ -164,7 +164,7 @@ export default function HomePage() {
       <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-50">
         <div className="relative container mx-auto px-4 py-3 sm:py-4 md:py-5 flex items-center justify-between">
 
-          {/* Logo responsiva e à esquerda */}
+          {/* Logo responsiva*/}
           <img
             src="/logosq.png"
             alt="Logo ExploraSaquá"
@@ -193,12 +193,15 @@ export default function HomePage() {
         <img
           src="/saquarema.jpeg"
           alt="Vista de Saquarema"
-          className="w-full h-full object-cover opacity-90 fade-bottom-mask"
+          className="w-full h-full object-cover opacity-100 fade-bottom-mask"
         />
       </div>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-12 md:py-20">
+<section className="container mx-auto px-4 py-12 md:py-20 relative z-10 -mt-[400px] md:-mt-[210px]">
+
+
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
