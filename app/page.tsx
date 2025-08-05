@@ -166,7 +166,7 @@ export default function HomePage() {
 
           {/* Logo responsiva*/}
           <img
-            src="/logosq.png"
+            src="/logo2sq.png"
             alt="Logo ExploraSaquá"
             // Esconde a logo por padrão (mobile) e a mostra e aumenta a partir de 'md'
             className="hidden md:block h-16 lg:h-20 w-auto absolute left-4 top-1/2 -translate-y-1/2"
@@ -179,7 +179,7 @@ export default function HomePage() {
               text-center 
               absolute left-1/2 -translate-x-1/2
             ">
-              ExploraSaquá
+              ExploreSaquá
             </h1>
 
           {/*elemento vazio para equilibrar o espaço*/}
@@ -193,7 +193,7 @@ export default function HomePage() {
         <img
           src="/saquarema.jpeg"
           alt="Vista de Saquarema"
-          className="w-full h-full object-cover opacity-100 fade-bottom-mask"
+          className="w-full h-full object-cover opacity-80 md:opacity-100 fade-bottom-mask"
         />
       </div>
 
@@ -208,6 +208,11 @@ export default function HomePage() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
+            <img
+    src="/logo2sq.png"
+    alt="Logo ExploraSaquá"
+    className="block md:hidden mx-auto h-24 w-auto mb-20"
+  />
           <h2 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
             O que você quer{" "}
             <span className="bg-gradient-to-r from-[#017DB9] to-[#007a73] bg-clip-text text-transparent">
@@ -215,7 +220,7 @@ export default function HomePage() {
             </span>{" "}
             hoje?
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl font-bold text-gray-700 md:text-gray-600 max-w-2xl mx-auto">
             Descubra os melhores lugares de Saquarema com nosso guia completo
             para moradores e visitantes
           </p>
