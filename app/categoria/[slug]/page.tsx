@@ -1,21 +1,16 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { 
-  ArrowLeft, Clock, MapPin, Phone, Globe, Search // Ícone de busca importado
+  ArrowLeft, Clock, MapPin, Phone, Globe, Search
 } from "lucide-react"
 import dynamic from "next/dynamic"
 import { db } from "../../firebase" 
 import { collection, getDocs, query, where } from "firebase/firestore"
 import { useMap } from "react-leaflet"
 import { categories } from "../../page"; 
-import { useRef } from "react";
 import L from "leaflet"
-
-
-
-
 
 const defaultIcon = new L.Icon({
   iconUrl: "/marker-icon-blue.png",
@@ -54,6 +49,21 @@ function MapInstanceHandler({ onMapReady }: { onMapReady: (mapInstance: any) => 
   return null
 }
 
+// Função para calcular distância entre coordenadas (Haversine)
+function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371; // km
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos((lat1 * Math.PI)/180) * Math.cos((lat2 * Math.PI)/180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+  ;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const d = R * c;
+  return d;
+}
+
 export default function CategoryPage({ params }: PageProps) {
   const [locations, setLocations] = useState<any[]>([])
   const [selectedLocation, setSelectedLocation] = useState<any>(null)
@@ -64,10 +74,38 @@ export default function CategoryPage({ params }: PageProps) {
   const [mapInstance, setMapInstance] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true);
   const markerRefs = useRef<Record<string, L.Marker>>( {} );
-  // NOVO: Estado para o termo de busca
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // Novos estados para geolocalização
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [nearestLocations, setNearestLocations] = useState<any[]>([]);
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [geoError, setGeoError] = useState<string | null>(null);
+  const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null)
+  const [locationError, setLocationError] = useState<string | null>(null)
 
   useEffect(() => {
+     if (!navigator.geolocation) {
+    setLocationError("Geolocalização não é suportada pelo navegador.")
+    return
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      setUserPosition({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      })
+      setLocationError(null)
+    },
+    (error) => {
+      if (error.code === 1) {
+        setLocationError("Permissão negada para acessar localização.")
+      } else {
+        setLocationError("Erro ao obter localização.")
+      }
+    }
+  )
     setIsClient(true)
     const timer = setTimeout(() => setMapKey((prev) => prev + 1), 500)
     return () => clearTimeout(timer)
@@ -86,19 +124,43 @@ export default function CategoryPage({ params }: PageProps) {
   }, [isClient])
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
+  const cacheKey = `locations_${params.slug}`
 
-      const categoryInfo = categories.find(cat => cat.id === params.slug);
-      let categoryTitle = categoryInfo ? categoryInfo.title : '';
+  const fetchData = async () => {
+    setIsLoading(true);
 
-      if (!categoryTitle) {
-        console.warn(`Categoria '${params.slug}' não encontrada ou sem título correspondente.`);
-        setLocations([]);
-        setIsLoading(false);
-        return;
+    // Tenta pegar dados do cache localStorage
+    try {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        const cacheTimestamp = parsed.timestamp;
+        const now = Date.now();
+        const oneHour = 60 * 60 * 1000; // 1 hora em ms
+
+        if (now - cacheTimestamp < oneHour) {
+          setLocations(parsed.data);
+          setIsLoading(false);
+          return; // Sai da função, usando cache válido
+        }
       }
+    } catch (err) {
+      console.warn("Erro ao ler cache localStorage", err);
+      // Continua para buscar do Firestore se der erro no cache
+    }
 
+    // Se não achou cache válido, faz a consulta no Firestore
+    const categoryInfo = categories.find(cat => cat.id === params.slug);
+    let categoryTitle = categoryInfo ? categoryInfo.title : '';
+
+    if (!categoryTitle) {
+      console.warn(`Categoria '${params.slug}' não encontrada ou sem título correspondente.`);
+      setLocations([]);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
       const locationsRef = collection(db, "locations");
       const q = query(locationsRef, where("category", "==", categoryTitle));
 
@@ -125,12 +187,74 @@ export default function CategoryPage({ params }: PageProps) {
           coordinates: parsedCoordinates,
         };
       });
-      
+
+      // Salva no cache local com timestamp para expirar depois de 1 hora
+      localStorage.setItem(cacheKey, JSON.stringify({
+        timestamp: Date.now(),
+        data,
+      }));
+
       setLocations(data);
-      setIsLoading(false);
-    };
-    fetchData();
-  }, [params.slug]);
+    } catch (error) {
+      console.error("Erro ao buscar locais no Firestore:", error);
+      setLocations([]);
+    }
+
+    setIsLoading(false);
+  };
+
+  fetchData();
+}, [params.slug]);
+
+
+  // Obter geolocalização e calcular locais próximos quando locations mudarem
+  useEffect(() => {
+    if (!locations || locations.length === 0) {
+      setNearestLocations([]);
+      return;
+    }
+
+    if (!("geolocation" in navigator)) {
+      setGeoError("Geolocalização não é suportada pelo seu navegador.");
+      setNearestLocations([]);
+      return;
+    }
+
+    setGeoLoading(true);
+    setGeoError(null);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+
+        const locationsWithDistance = locations
+          .map((loc) => {
+            if (loc.coordinates && loc.coordinates.lat && loc.coordinates.lng) {
+              const dist = getDistanceFromLatLonInKm(
+                latitude,
+                longitude,
+                loc.coordinates.lat,
+                loc.coordinates.lng
+              );
+              return { ...loc, distance: dist };
+            }
+            return { ...loc, distance: Infinity };
+          })
+          .filter((loc) => loc.distance !== Infinity)
+          .sort((a, b) => a.distance - b.distance);
+
+        setNearestLocations(locationsWithDistance.slice(0, 3));
+        setGeoLoading(false);
+      },
+      (error) => {
+        setGeoError("Não foi possível obter sua localização.");
+        setNearestLocations([]);
+        setGeoLoading(false);
+      },
+      { enableHighAccuracy: true, timeout: 7000 }
+    );
+  }, [locations]);
 
   const focusOnLocation = (location: any) => {
     setSelectedLocation(location)
@@ -237,15 +361,78 @@ export default function CategoryPage({ params }: PageProps) {
       </header>
 
       <div className="container mx-auto px-4 py-8">
+        {/* --- NOVA SEÇÃO LOCAIS MAIS PRÓXIMOS --- */}
+        {geoLoading && (
+          <p className="text-center text-gray-600 mb-6">Buscando sua localização...</p>
+        )}
+        {geoError && (
+        <div className="text-center text-red-600 mb-6">
+          {geoError} <br />
+          Para usar a função de locais mais próximos, por favor habilite a localização no seu navegador.
+        </div>
+        )}
+        {!geoLoading && !geoError && nearestLocations.length > 0 && (
+          <section className="mb-10 px-4">
+            <motion.h2
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-3xl font-extrabold text-[#017DB9] mb-4"
+            >
+              Descubra os locais mais próximos de você
+            </motion.h2>
+
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.15,
+                  },
+                },
+              }}
+              className="flex gap-6 overflow-x-auto pb-2"
+            >
+              {nearestLocations.map((loc, i) => (
+                <motion.div
+                  key={loc.id}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  className="min-w-[220px] bg-[#017DB9] text-white rounded-xl shadow-lg p-4 cursor-pointer flex-shrink-0 hover:scale-[1.05] transition-transform"
+                  onClick={() => focusOnLocation(loc)}
+                >
+                  {loc.imageUrl && (
+                    <img
+                      src={loc.imageUrl}
+                      alt={loc.name}
+                      className="w-full h-32 object-cover rounded-md mb-3 border-2 border-white"
+                    />
+                  )}
+                  <h3 className="text-lg font-bold">{loc.name}</h3>
+                  <p className="text-sm mt-1">{loc.address}</p>
+                  <p className="text-sm mt-1 font-semibold">{loc.distance.toFixed(2)} km</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </section>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <motion.h2
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4 }}
-                      className="text-3xl font-bold text-gray-800 tracking-tight"
-                    >Locais Recomendados</motion.h2>
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="text-3xl font-bold text-gray-800 tracking-tight"
+              >
+                Locais Recomendados
+              </motion.h2>
               {selectedLocation && (
                 <button onClick={resetMapView} className="text-sm text-blue-600 hover:text-blue-800 underline">
                   Ver todos no mapa
@@ -271,7 +458,6 @@ export default function CategoryPage({ params }: PageProps) {
               />
             </div>
 
-
             {/*Contêiner com Barra de Rolagem */}
             <div className="space-y-4 max-h-[70vh] overflow-y-auto px-4">
               {filteredLocations.map((location: any, index: number) => (
@@ -280,16 +466,14 @@ export default function CategoryPage({ params }: PageProps) {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  //Cor de seleção do card 
                   className={`bg-white rounded-xl shadow-md p-6 cursor-pointer transition-transform duration-300 hover:shadow-xl hover:scale-[1.02] ${
                     selectedLocation?.id === location.id ? "ring-2 ring-offset-2 ring-[#017DB9] shadow-lg" : ""
                   }`}
                   onClick={() => focusOnLocation(location)}
                 >
-                    {/* Imagem de Destaque */}
-                {location.imageUrl && (
-                  <img src={location.imageUrl} alt={location.name} className="w-full h-32 object-cover" />
-                )}
+                  {location.imageUrl && (
+                    <img src={location.imageUrl} alt={location.name} className="w-full h-32 object-cover" />
+                  )}
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="text-lg font-semibold text-gray-800">{location.name}</h3>
                     <div className="flex items-center gap-2">
@@ -299,7 +483,6 @@ export default function CategoryPage({ params }: PageProps) {
                           <span className="text-sm text-gray-600">{location.rating}</span>
                         </div>
                       )}
-                      {/* NOVO: Indicador de seleção atualizado */}
                       {selectedLocation?.id === location.id && (
                         <div className="w-2 h-2 bg-[#017DB9] rounded-full animate-pulse"></div>
                       )}
@@ -360,6 +543,7 @@ export default function CategoryPage({ params }: PageProps) {
                     tileSize={256}
                   />
               
+
               {filteredLocations
                 .filter(location => location.coordinates && location.coordinates.lat != null && location.coordinates.lng != null)
                 .map((location) => {
@@ -433,7 +617,6 @@ export default function CategoryPage({ params }: PageProps) {
                 </div>
               )}
             </div>
-            {/*Botao de explorar no maps (futuramente vou colocar mais infos e ele vai ser util*/}
             {!selectedLocation && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -457,7 +640,6 @@ export default function CategoryPage({ params }: PageProps) {
                 transition={{ duration: 0.5 }}
                 className="mt-4 bg-blue-50 rounded-2xl p-4 border border-blue-200 shadow"
               >
-
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold text-blue-800 mb-1">Local Selecionado</h3>
