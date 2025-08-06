@@ -59,23 +59,26 @@
 }
 
 /* Scrollbar customizado */
+/* Scrollbar moderna e sutil */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 3px;
+  background: rgba(1, 125, 185, 0.4); /* tom do seu azul (#017DB9) com opacidade */
+  border-radius: 8px;
+  transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+  background: rgba(1, 125, 185, 0.6);
 }
+
 .fade-bottom-mask {
   mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
@@ -91,10 +94,8 @@
   display: none;
 }
 /* Estilos da barra de rolagem para Firefox */
-html {
-  scrollbar-width: thin; /* 'auto', 'thin' ou 'none' */
-  scrollbar-color: #a8a8a8 #f1f1f1; /* cor do 'thumb' e do 'track' */
-}
+
+
 @keyframes slide-down {
   from {
     opacity: 0;

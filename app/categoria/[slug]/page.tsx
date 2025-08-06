@@ -372,54 +372,71 @@ export default function CategoryPage({ params }: PageProps) {
         </div>
         )}
         {!geoLoading && !geoError && nearestLocations.length > 0 && (
-          <section className="mb-10 px-4">
-            <motion.h2
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-3xl font-extrabold text-[#017DB9] mb-4"
-            >
-              Descubra os locais mais próximos de você
-            </motion.h2>
+          <section className="mb-14 px-4">
+<motion.h2
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5 }}
+  className="text-2xl md:text-3xl font-semibold tracking-tight text-[#017DB9] mb-6 border-l-4 border-[#017DB9] pl-4"
+>
+  Explore os locais mais próximos de você
+</motion.h2>
 
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.15,
-                  },
-                },
-              }}
-              className="flex gap-6 overflow-x-auto pb-2"
-            >
-              {nearestLocations.map((loc, i) => (
-                <motion.div
-                  key={loc.id}
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    visible: { opacity: 1, y: 0 },
-                  }}
-                  className="min-w-[220px] bg-[#017DB9] text-white rounded-xl shadow-lg p-4 cursor-pointer flex-shrink-0 hover:scale-[1.05] transition-transform"
-                  onClick={() => focusOnLocation(loc)}
-                >
-                  {loc.imageUrl && (
-                    <img
-                      src={loc.imageUrl}
-                      alt={loc.name}
-                      className="w-full h-32 object-cover rounded-md mb-3 border-2 border-white"
-                    />
-                  )}
-                  <h3 className="text-lg font-bold">{loc.name}</h3>
-                  <p className="text-sm mt-1">{loc.address}</p>
-                  <p className="text-sm mt-1 font-semibold">{loc.distance.toFixed(2)} km</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </section>
+  <motion.div
+    initial="hidden"
+    animate="visible"
+    variants={{
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: 0.15,
+        },
+      },
+    }}
+    className="flex flex-col md:flex-row gap-6 overflow-y-auto md:overflow-x-auto md:pb-3 max-h-[80vh]"
+
+  >
+    {nearestLocations.map((loc, i) => (
+      <motion.div
+        key={loc.id}
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 1, y: 0 },
+        }}
+        className="min-w-[250px] bg-white text-gray-800 rounded-2xl shadow-md hover:shadow-xl border border-[#017DB9]/20 p-4 cursor-pointer flex-shrink-0 hover:scale-[1.03] transition-all duration-300"
+        onClick={() => focusOnLocation(loc)}
+      >
+        {loc.imageUrl && (
+          <img
+            src={loc.imageUrl}
+            alt={loc.name}
+            className="w-full h-36 object-cover rounded-xl mb-4 border border-[#017DB9]/30"
+          />
+        )}
+        <h3 className="text-lg font-semibold text-[#017DB9] mb-1">{loc.name}</h3>
+        <p className="text-sm text-gray-600">{loc.address}</p>
+        <div className="flex justify-between items-center mt-3">
+          <p className="text-sm font-medium text-[#017DB9]">{loc.distance.toFixed(2)} km</p>
+          {loc.rating && (
+            <div className="flex items-center gap-1 text-yellow-500 text-sm font-semibold">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4 fill-yellow-500"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 .587l3.668 7.571L24 9.748l-6 5.853 1.417 8.269L12 18.896 4.583 23.87 6 15.6 0 9.748l8.332-1.59z" />
+              </svg>
+              <span>{loc.rating}</span>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    ))}
+  </motion.div>
+  {/* Linha divisória elegante */}
+<div className="h-px w-full bg-gradient-to-r from-transparent via-gray-300 to-transparent my-5" />
+</section>
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
