@@ -335,11 +335,14 @@ export default function CategoryPage({ params }: PageProps) {
                     tileSize={256}
                   />
 
-            {filteredLocations.map((location) => {
-              const position: [number, number] = [
-                location.coordinates.lat,
-                location.coordinates.lng,
-              ];
+              {filteredLocations
+                
+                .filter(location => location.coordinates && location.coordinates.lat != null && location.coordinates.lng != null)
+                .map((location) => {
+                  const position: [number, number] = [
+                    location.coordinates.lat,
+                    location.coordinates.lng,
+                  ];
 
               return (
                 <Marker
