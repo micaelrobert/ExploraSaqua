@@ -21,7 +21,8 @@ import {
   Ambulance, 
   Volleyball, 
   Cherry,
-  Search
+  Search,
+  PhoneCall
   
 } from "lucide-react";
 export {categories}
@@ -48,11 +49,11 @@ const categories = [
     description: "Aventuras na natureza",
   },
   {
-    id: "academias",
-    title: "Academias",
-    icon: Dumbbell,
+    id: "telefones-uteis",
+    title: "Telefones Úteis",
+    icon: PhoneCall,
     color: "from-red-400 to-pink-500",
-    description: "Mantenha-se ativo",
+    description: "Mantenha-se conectado",
   },
   {
     id: "escolas",

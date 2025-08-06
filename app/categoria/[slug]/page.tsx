@@ -211,7 +211,7 @@ export default function CategoryPage({ params }: PageProps) {
   const CategoryIcon = category.icon;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#017DB9] via-white to-[#007a73]">
+    <div className="min-h-screen bg-slate-50">
       <header className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-3 py-4">
           <div className="flex items-center gap-4">
@@ -266,7 +266,7 @@ export default function CategoryPage({ params }: PageProps) {
 
 
             {/*Contêiner com Barra de Rolagem */}
-            <div className="space-y-4 max-h-[65vh] overflow-y-auto px-4">
+            <div className="space-y-4 max-h-[70vh] overflow-y-auto px-4">
               {filteredLocations.map((location: any, index: number) => (
                 <motion.div
                   key={location.id}
@@ -279,6 +279,10 @@ export default function CategoryPage({ params }: PageProps) {
                   }`}
                   onClick={() => focusOnLocation(location)}
                 >
+                    {/* Imagem de Destaque */}
+                {location.imageUrl && (
+                  <img src={location.imageUrl} alt={location.name} className="w-full h-32 object-cover" />
+                )}
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="text-lg font-semibold text-gray-800">{location.name}</h3>
                     <div className="flex items-center gap-2">
@@ -336,7 +340,6 @@ export default function CategoryPage({ params }: PageProps) {
                   />
 
               {filteredLocations
-                
                 .filter(location => location.coordinates && location.coordinates.lat != null && location.coordinates.lng != null)
                 .map((location) => {
                   const position: [number, number] = [

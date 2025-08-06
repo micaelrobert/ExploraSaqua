@@ -80,3 +80,18 @@
   mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
 }
+/* Garante que o conteúdo dentro do popup não tenha margens estranhas */
+.leaflet-popup-content {
+  margin: 0 !important;
+  font-family: inherit; 
+  padding: 1rem; 
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  display: none;
+}
+/* Estilos da barra de rolagem para Firefox */
+html {
+  scrollbar-width: thin; /* 'auto', 'thin' ou 'none' */
+  scrollbar-color: #a8a8a8 #f1f1f1; /* cor do 'thumb' e do 'track' */
+}
