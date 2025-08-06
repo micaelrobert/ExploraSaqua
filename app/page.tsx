@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowUp } from "lucide-react"; 
 import Head from "next/head";
-
+import { Navbar } from "./navbar"
 import {
   UtensilsCrossed,
   MapPin,
@@ -192,35 +192,10 @@ export default function HomePage() {
       <meta property="og:url" content="https://explora-saqua.vercel.app/" />
     </Head>
 
+
     <div className="min-h-screen bg-gradient-to-br from-[#017DB9] via-white to-[#007a73]">
     {/* Header */}
-    
-      <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-50">
-        <div className="relative container mx-auto px-4 py-3 sm:py-4 md:py-5 flex items-center justify-between">
-
-          {/* Logo responsiva*/}
-          <img
-            src="/logo2sq.png"
-            alt="Logo ExploraSaquá"
-            // Esconde a logo por padrão (mobile) e a mostra e aumenta a partir de 'md'
-            className="hidden md:block h-16 lg:h-20 w-auto absolute left-4 top-1/2 -translate-y-1/2"
-          />
-
-          {/* Título centralizado, ajustando para a presença do logo */}
-            <h1 className="
-              text-xl sm:text-2xl md:text-3xl lg:text-4xl
-              font-bold bg-gradient-to-r from-[#017DB9] to-[#007a73] bg-clip-text text-transparent 
-              text-center 
-              absolute left-1/2 -translate-x-1/2
-            ">
-              ExploreSaquá
-            </h1>
-
-          {/*elemento vazio para equilibrar o espaço*/}
-          {/* Este div ainda é útil para manter o h1 centralizado quando a logo está oculta em telas menores */}
-          <div className="h-8 sm:h-10 md:h-12 w-8 sm:w-10 md:w-12"></div>
-        </div>
-      </header>
+      <Navbar />
 
       {/* imagem como banner com efeito fade na parte inferior */}
       <div className="relative w-full h-[400px] overflow-hidden">

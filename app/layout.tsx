@@ -1,10 +1,10 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-import { ThemeProvider } from "next-themes";
+import type React from "react";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] })
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "ExploraSaquá - Guia de Saquarema",
@@ -13,7 +13,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "ExploraSaquá - Guia de Saquarema",
-    description: "Descubra os melhores lugares de Saquarema com nosso guia completo para moradores e visitantes",
+    description:
+      "Descubra os melhores lugares de Saquarema com nosso guia completo para moradores e visitantes",
     url: "https://explora-saqua.vercel.app/",
     siteName: "ExploraSaquá",
     images: [
@@ -26,17 +27,18 @@ export const metadata: Metadata = {
     ],
     type: "website",
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+          {children}
+      </body>
     </html>
-    
-  )
+  );
 }
