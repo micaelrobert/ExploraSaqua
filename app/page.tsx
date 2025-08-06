@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowUp } from "lucide-react"; 
+import Head from "next/head";
 
 import {
   UtensilsCrossed,
@@ -180,6 +181,17 @@ export default function HomePage() {
   }, []);
 
   return (
+    <>
+    <Head>
+      <title>ExploraSaquá - Descubra Saquarema</title>
+      <meta name="description" content="Seu guia completo para explorar os melhores lugares, serviços e atrações de Saquarema." />
+      <meta property="og:image" content="/logo2sq.png" />
+      <meta property="og:title" content="ExploraSaquá" />
+      <meta property="og:description" content="Descubra os encantos de Saquarema de forma gratuita." />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://explora-saqua.vercel.app/" />
+    </Head>
+
     <div className="min-h-screen bg-gradient-to-br from-[#017DB9] via-white to-[#007a73]">
     {/* Header */}
     
@@ -367,5 +379,7 @@ export default function HomePage() {
         </div>
       </footer>
     </div>
+    </>
   );
+  
 }
