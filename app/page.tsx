@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { ArrowUp } from "lucide-react"; 
 
 import {
   UtensilsCrossed,
@@ -95,7 +96,7 @@ const categories = [
     title: "Lazer e Esporte",
     icon: Volleyball,
     color: "from-amber-400 to-yellow-500",
-    description: "Opções para diversão e atividades físicas",
+    description: "Diversão e atividades físicas",
   },
   {
     id: "espacos-culturais",
@@ -130,7 +131,7 @@ const categories = [
     title: "Emergências",
     icon: Ambulance,
     color: "from-red-600 to-rose-700",
-    description: "Serviços de emergência e utilidade pública",
+    description: "Serviços de emergência e saúde",
   },
   {
     id: "feiras",
@@ -144,7 +145,10 @@ const categories = [
 
 export default function HomePage() {
   const [visibleCards, setVisibleCards] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
+  // Animação progressiva dos cards
   useEffect(() => {
     const timer = setInterval(() => {
       setVisibleCards((prev) => {
@@ -157,11 +161,28 @@ export default function HomePage() {
 
     return () => clearInterval(timer);
   }, []);
-    const [searchTerm, setSearchTerm] = useState("");
+
+  // Verificar se chegou ao fim da página
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const bottomPosition = document.body.offsetHeight;
+
+      if (scrollPosition >= bottomPosition - 100) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#017DB9] via-white to-[#007a73]">
     {/* Header */}
+    
       <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-50">
         <div className="relative container mx-auto px-4 py-3 sm:py-4 md:py-5 flex items-center justify-between">
 
@@ -249,7 +270,8 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
          {categories
           .filter((category) =>
-            category.title.toLowerCase().includes(searchTerm.toLowerCase())
+            category.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            category.description.toLowerCase().includes(searchTerm.toLowerCase())
           )
           .map((category, index) => {
             const Icon = category.icon;
@@ -270,16 +292,16 @@ export default function HomePage() {
                 }}
               >
                 <Link href={`/categoria/${category.id}`}>
-                  <div className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer flex flex-col justify-between min-h-[220px]">
+                 <div className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02]">
+
 
                     <div
                       className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
                     />
 
                     <div className="p-6">
-                      <div
-                        className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${category.color} mb-4 group-hover:scale-110 transition-transform duration-300`}
-                      >
+                     <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${category.color} mb-4 group-hover:scale-125 group-hover:brightness-110 transition-transform duration-300`}>
+
                         <Icon className="w-6 h-6 text-white" />
                       </div>
 
@@ -300,6 +322,31 @@ export default function HomePage() {
           })}
         </div>
       </section>
+       {/* Botão "Voltar ao topo" */}
+      {showScrollTop && (
+        <motion.button
+          type="button"
+          aria-label="Voltar ao topo"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="
+            fixed bottom-6 left-6 z-50 
+            bg-[#017DB9] hover:bg-blue-800 
+            text-white font-semibold font-sans 
+            px-5 py-3 rounded-full 
+            shadow-lg shadow-blue-600/50 
+            flex items-center gap-2
+            transition-colors duration-300
+            md:hidden
+            select-none
+            cursor-pointer
+          "
+        >
+          
+          <ArrowUp size={20} />
+        </motion.button>
+      )}
 
       {/* Footer */}
       <footer className="bg-gray-50 border-t border-gray-200 mt-20">
