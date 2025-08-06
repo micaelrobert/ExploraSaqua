@@ -168,10 +168,12 @@ export default function CategoryPage({ params }: PageProps) {
 
   const category = categories.find(cat => cat.id === params.slug);
 
-  // NOVO: Filtra os locais com base no termo de busca
+  // Filtra os locais com base no termo de busca
   const filteredLocations = locations.filter(location =>
-    location.name.toLowerCase().includes(searchTerm.toLowerCase())
+    location.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (location.description && location.description.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+
 
   if (!category) {
     return (
@@ -238,7 +240,12 @@ export default function CategoryPage({ params }: PageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">Locais Recomendados</h2>
+              <motion.h2
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4 }}
+                      className="text-3xl font-bold text-gray-800 tracking-tight"
+                    >Locais Recomendados</motion.h2>
               {selectedLocation && (
                 <button onClick={resetMapView} className="text-sm text-blue-600 hover:text-blue-800 underline">
                   Ver todos no mapa
@@ -274,7 +281,7 @@ export default function CategoryPage({ params }: PageProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                   //Cor de seleção do card 
-                  className={`bg-white rounded-xl shadow-md p-6 cursor-pointer transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 ${
+                  className={`bg-white rounded-xl shadow-md p-6 cursor-pointer transition-transform duration-300 hover:shadow-xl hover:scale-[1.02] ${
                     selectedLocation?.id === location.id ? "ring-2 ring-offset-2 ring-[#017DB9] shadow-lg" : ""
                   }`}
                   onClick={() => focusOnLocation(location)}
@@ -320,8 +327,22 @@ export default function CategoryPage({ params }: PageProps) {
           </div>
 
           <div className="lg:sticky lg:top-0 h-fit" id="map-container">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Localização no Mapa</h2>
-            <div className="bg-white rounded-xl shadow-md overflow-hidden" style={{ height: "500px" }}>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              className="mb-4"
+            >
+              <h2 className="text-3xl font-bold text-gray-800 flex items-center gap-2">
+                <MapPin className="w-6 h-6 text-blue-600" /> Veja no mapa
+              </h2>
+              <p className="text-gray-500 text-sm mt-1">
+                Clique em um ponto para saber mais
+              </p>
+            </motion.div>
+
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200" style={{ height: "500px" }}>
+
               {isClient ? (
                 <MapContainer
                   key={mapKey}
@@ -338,7 +359,7 @@ export default function CategoryPage({ params }: PageProps) {
                     maxZoom={19}
                     tileSize={256}
                   />
-
+              
               {filteredLocations
                 .filter(location => location.coordinates && location.coordinates.lat != null && location.coordinates.lng != null)
                 .map((location) => {
@@ -402,6 +423,7 @@ export default function CategoryPage({ params }: PageProps) {
 
                   <MapInstanceHandler onMapReady={setMapInstance} />
                 </MapContainer>
+                
               ) : (
                 <div className="h-full flex items-center justify-center bg-gray-100">
                   <div className="text-center">
@@ -411,13 +433,31 @@ export default function CategoryPage({ params }: PageProps) {
                 </div>
               )}
             </div>
+            {/*Botao de explorar no maps (futuramente vou colocar mais infos e ele vai ser util*/}
+            {!selectedLocation && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+                className="mt-4 text-center block lg:hidden"
+              >
+                <a
+                  href="#map-container"
+                  className="inline-block bg-[#017DB9] text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-700 transition"
+                >
+                  Explorar no mapa
+                </a>
+              </motion.div>
+            )}
 
             {selectedLocation && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-4 bg-blue-50 rounded-xl p-4 border border-blue-200"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                className="mt-4 bg-blue-50 rounded-2xl p-4 border border-blue-200 shadow"
               >
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold text-blue-800 mb-1">Local Selecionado</h3>
