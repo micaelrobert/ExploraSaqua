@@ -1,5 +1,5 @@
 "use client";
-
+import Image from 'next/image';
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -186,7 +186,7 @@ export default function HomePage() {
       <title>ExploreSaquá - Descubra Saquarema</title>
       <meta name="description" content="Seu guia completo para explorar os melhores lugares, serviços e atrações de Saquarema." />
       <meta property="og:image" content="/logo2sq.png" />
-      <meta property="og:title" content="ExploraSaquá" />
+      <meta property="og:title" content="ExploreSaquá" />
       <meta property="og:description" content="Descubra os encantos de Saquarema de forma gratuita." />
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://explora-saqua.vercel.app/" />
@@ -199,9 +199,11 @@ export default function HomePage() {
 
       {/* imagem como banner com efeito fade na parte inferior */}
       <div className="relative w-full h-[400px] overflow-hidden">
-        <img
-          src="/saquarema.jpeg"
+        <Image
+          src="/saquarema.png"
           alt="Vista de Saquarema"
+            width={1536} 
+            height={1024}
           className="w-full h-full object-cover opacity-80 md:opacity-100 fade-bottom-mask"
         />
       </div>
@@ -217,11 +219,13 @@ export default function HomePage() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-            <img
-    src="/logo2sq.png"
-    alt="Logo ExploraSaquá"
-    className="block md:hidden mx-auto h-24 w-auto mb-20"
-  />
+<Image
+  src="/logo2sq.png"
+  alt="Logo ExploreSaquá"
+  width={2660} 
+  height={898} 
+  className="block md:hidden mx-auto h-24 w-auto mb-20"
+/>
           <h2 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
             O que você quer{" "}
             <span className="bg-gradient-to-r from-[#017DB9] to-[#007a73] bg-clip-text text-transparent">

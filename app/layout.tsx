@@ -7,22 +7,22 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ExploraSaquá - Guia de Saquarema",
+  title: "ExploreSaquá - Descubra Saquarema",
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "ExploraSaquá - Guia de Saquarema",
+    title: "ExploreSaquá",
     description:
       "Descubra os melhores lugares de Saquarema com nosso guia completo para moradores e visitantes",
     url: "https://explora-saqua.vercel.app/",
-    siteName: "ExploraSaquá",
+    siteName: "ExploreSaquá",
     images: [
       {
         url: "/logo2sq.png",
         width: 1200,
         height: 630,
-        alt: "ExploraSaquá Logo",
+        alt: "ExploreSaquá Logo",
       },
     ],
     type: "website",
