@@ -31,7 +31,7 @@ export {categories}
 const categories = [
   {
     id: "restaurantes",
-    title: "Gastronomia",
+    title: "Restaurantes e Lanchonetes",
     icon: UtensilsCrossed,
     color: "from-orange-400 to-red-500",
     description: "Sabores únicos da região",
