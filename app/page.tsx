@@ -31,7 +31,7 @@ export {categories}
 const categories = [
   {
     id: "restaurantes",
-    title: "Restaurantes e Lanchonetes",
+    title: "Gastronomia",
     icon: UtensilsCrossed,
     color: "from-orange-400 to-red-500",
     description: "Sabores únicos da região",
@@ -183,7 +183,7 @@ export default function HomePage() {
   return (
     <>
     <Head>
-      <title>ExploraSaquá - Descubra Saquarema</title>
+      <title>ExploreSaquá - Descubra Saquarema</title>
       <meta name="description" content="Seu guia completo para explorar os melhores lugares, serviços e atrações de Saquarema." />
       <meta property="og:image" content="/logo2sq.png" />
       <meta property="og:title" content="ExploraSaquá" />
@@ -340,7 +340,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              ExploraSaquá
+              ExploreSaquá
             </h3>
             <p className="text-gray-600 mb-4"> {/* mb-4 aqui para espaçar o parágrafo de descrição */}
               Seu guia completo para descobrir o melhor de Saquarema

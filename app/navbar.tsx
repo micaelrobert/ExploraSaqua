@@ -15,8 +15,8 @@ export function Navbar() {
         <Link href="/">
           <img
             src="/logo2sq.png"
-            alt="Logo ExploraSaquá"
-            className="hidden md:block h-16 lg:h-20 w-auto absolute left-4 top-1/2 -translate-y-1/2 cursor-pointer"
+            alt="Logo ExploreSaquá"
+            className="hidden md:block h-16 lg:h-19 w-auto absolute left-4 top-1/2 -translate-y-1/2 cursor-pointer"
           />
         </Link>
 
@@ -26,7 +26,7 @@ export function Navbar() {
           bg-gradient-to-r from-[#017DB9] to-[#007a73] bg-clip-text text-transparent 
           text-center absolute left-1/2 -translate-x-1/2 select-none
         ">
-          ExploraSaquá
+          ExploreSaquá
         </h1>
 
         {/* Ícones - visíveis apenas no desktop */}

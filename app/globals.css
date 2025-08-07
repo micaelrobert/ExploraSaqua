@@ -70,13 +70,13 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(1, 125, 185, 0.4); /* tom do seu azul (#017DB9) com opacidade */
+  background: rgba(142, 155, 161, 0.4); /* tom do seu azul (#017DB9) com opacidade */
   border-radius: 8px;
   transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(1, 125, 185, 0.6);
+  background: rgba(130, 138, 141, 0.6);
 }
 
 .fade-bottom-mask {
