@@ -11,7 +11,7 @@ import { collection, getDocs, query, where } from "firebase/firestore"
 import { useMap } from "react-leaflet"
 import { categories } from "../../page"; 
 import L from "leaflet"
-
+import { onSnapshot } from "firebase/firestore";
 const defaultIcon = new L.Icon({
   iconUrl: "/marker-icon-blue.png",
   shadowUrl: "/marker-shadow.png",
@@ -123,88 +123,83 @@ export default function CategoryPage({ params }: PageProps) {
     }
   }, [isClient])
 
-  useEffect(() => {
-  const cacheKey = `locations_${params.slug}`
+ useEffect(() => {
+  const cacheKey = `locations_${params.slug}`;
+  setIsLoading(true);
 
-  const fetchData = async () => {
-    setIsLoading(true);
+  // Tenta pegar dados do cache localStorage
+  try {
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      const cacheTimestamp = parsed.timestamp;
+      const now = Date.now();
+      const oneHour = 60 * 60 * 1000; // 1 hora
 
-    // Tenta pegar dados do cache localStorage
-    try {
-      const cached = localStorage.getItem(cacheKey);
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        const cacheTimestamp = parsed.timestamp;
-        const now = Date.now();
-        const oneHour = 60 * 60 * 1000; // 1 hora em ms
-
-        if (now - cacheTimestamp < oneHour) {
-          setLocations(parsed.data);
-          setIsLoading(false);
-          return; // Sai da função, usando cache válido
-        }
+      if (now - cacheTimestamp < oneHour) {
+        setLocations(parsed.data);
+        setIsLoading(false);
+        return; // Sai da função, cache válido
       }
-    } catch (err) {
-      console.warn("Erro ao ler cache localStorage", err);
-      // Continua para buscar do Firestore se der erro no cache
     }
+  } catch (err) {
+    console.warn("Erro ao ler cache localStorage", err);
+  }
 
-    // Se não achou cache válido, faz a consulta no Firestore
-    const categoryInfo = categories.find(cat => cat.id === params.slug);
-    let categoryTitle = categoryInfo ? categoryInfo.title : '';
+  // Se cache não válido, ou não existe, faz a consulta em tempo real com onSnapshot
+  const categoryInfo = categories.find(cat => cat.id === params.slug);
+  let categoryTitle = categoryInfo ? categoryInfo.title : '';
 
-    if (!categoryTitle) {
-      console.warn(`Categoria '${params.slug}' não encontrada ou sem título correspondente.`);
-      setLocations([]);
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const locationsRef = collection(db, "locations");
-      const q = query(locationsRef, where("category", "==", categoryTitle));
-
-      const querySnapshot = await getDocs(q);
-
-      const data = querySnapshot.docs.map((doc) => {
-        const docData = doc.data();
-        let parsedCoordinates = null;
-
-        if (typeof docData.coordinates === 'string') {
-          try {
-            parsedCoordinates = JSON.parse(docData.coordinates);
-          } catch (e) {
-            console.error("Erro ao fazer parse das coordenadas:", docData.coordinates, e);
-            parsedCoordinates = null;
-          }
-        } else if (typeof docData.coordinates === 'object' && docData.coordinates !== null) {
-          parsedCoordinates = docData.coordinates;
-        }
-
-        return {
-          id: doc.id,
-          ...docData,
-          coordinates: parsedCoordinates,
-        };
-      });
-
-      // Salva no cache local com timestamp para expirar depois de 1 hora
-      localStorage.setItem(cacheKey, JSON.stringify({
-        timestamp: Date.now(),
-        data,
-      }));
-
-      setLocations(data);
-    } catch (error) {
-      console.error("Erro ao buscar locais no Firestore:", error);
-      setLocations([]);
-    }
-
+  if (!categoryTitle) {
+    setLocations([]);
     setIsLoading(false);
-  };
+    return;
+  }
 
-  fetchData();
+  const locationsRef = collection(db, "locations");
+  const q = query(locationsRef, where("category", "==", categoryTitle));
+
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const data = querySnapshot.docs.map((doc) => {
+      const docData = doc.data();
+      let parsedCoordinates = null;
+
+      if (typeof docData.coordinates === 'string') {
+        try {
+          parsedCoordinates = JSON.parse(docData.coordinates);
+        } catch (e) {
+          console.error("Erro ao fazer parse das coordenadas:", docData.coordinates, e);
+          parsedCoordinates = null;
+        }
+      } else if (typeof docData.coordinates === 'object' && docData.coordinates !== null) {
+        parsedCoordinates = docData.coordinates;
+      }
+
+      return {
+        id: doc.id,
+        ...docData,
+        coordinates: parsedCoordinates,
+      };
+    });
+
+    // Atualiza cache localStorage
+    localStorage.setItem(cacheKey, JSON.stringify({
+      timestamp: Date.now(),
+      data,
+    }));
+
+    setLocations(data);
+    setIsLoading(false);
+  }, (error) => {
+    console.error("Erro no onSnapshot:", error);
+    setLocations([]);
+    setIsLoading(false);
+  });
+
+  return () => unsubscribe(); // limpa listener quando componente desmontar
+
 }, [params.slug]);
+
 
 
   // Obter geolocalização e calcular locais próximos quando locations mudarem
@@ -293,10 +288,11 @@ export default function CategoryPage({ params }: PageProps) {
   const category = categories.find(cat => cat.id === params.slug);
 
   // Filtra os locais com base no termo de busca
-  const filteredLocations = locations.filter(location =>
-    location.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (location.description && location.description.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+const filteredLocations = locations.filter(location =>
+  (location.name && typeof location.name === "string" && location.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+  (location.description && typeof location.description === "string" && location.description.toLowerCase().includes(searchTerm.toLowerCase()))
+);
+
 
 
   if (!category) {
@@ -607,15 +603,15 @@ export default function CategoryPage({ params }: PageProps) {
                           <span className="text-sm text-gray-600">{location.rating}</span>
                         </div>
                       )}
-                      <a
-                        href={`https://www.google.com/maps/search/?api=1&query=${location.coordinates.lat},${location.coordinates.lng}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-2 inline-block text-sm text-blue-600 hover:underline"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        Abrir no Maps
-                      </a>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.name + ', ' + location.address)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-block text-sm text-blue-600 hover:underline"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Abrir no Maps
+                    </a>
                     </div>
                   </Popup>
                 </Marker>
