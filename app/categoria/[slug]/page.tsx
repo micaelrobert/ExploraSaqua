@@ -12,6 +12,19 @@ import { useMap } from "react-leaflet"
 import { categories } from "../../page"; 
 import L from "leaflet"
 import { onSnapshot } from "firebase/firestore";
+import { useUserLocation } from "../../../components/userlocation";
+
+
+
+const userIcon = new L.Icon({
+  iconUrl: '/person-icon.png',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32],
+  shadowUrl: '',
+  shadowSize: [0, 0],
+});
+
 const defaultIcon = new L.Icon({
   iconUrl: "/marker-icon-blue.png",
   shadowUrl: "/marker-shadow.png",
@@ -34,6 +47,7 @@ const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.Map
 const TileLayer = dynamic(() => import("react-leaflet").then((mod) => mod.TileLayer), { ssr: false })
 const Marker = dynamic(() => import("react-leaflet").then((mod) => mod.Marker), { ssr: false })
 const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), { ssr: false })
+
 
 interface PageProps {
   params: {
@@ -81,35 +95,15 @@ export default function CategoryPage({ params }: PageProps) {
   const [nearestLocations, setNearestLocations] = useState<any[]>([]);
   const [geoLoading, setGeoLoading] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
-  const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null)
+  const userPosition = useUserLocation();
   const [locationError, setLocationError] = useState<string | null>(null)
+  
 
-  useEffect(() => {
-     if (!navigator.geolocation) {
-    setLocationError("Geolocalização não é suportada pelo navegador.")
-    return
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      setUserPosition({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      })
-      setLocationError(null)
-    },
-    (error) => {
-      if (error.code === 1) {
-        setLocationError("Permissão negada para acessar localização.")
-      } else {
-        setLocationError("Erro ao obter localização.")
-      }
-    }
-  )
-    setIsClient(true)
-    const timer = setTimeout(() => setMapKey((prev) => prev + 1), 500)
-    return () => clearTimeout(timer)
-  }, [])
+useEffect(() => {
+  setIsClient(true);
+  const timer = setTimeout(() => setMapKey((prev) => prev + 1), 500);
+  return () => clearTimeout(timer);
+}, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -603,6 +597,7 @@ const filteredLocations = locations.filter(location =>
                           <span className="text-sm text-gray-600">{location.rating}</span>
                         </div>
                       )}
+                      
                     <a
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.name + ', ' + location.address)}`}
                       target="_blank"
@@ -613,10 +608,23 @@ const filteredLocations = locations.filter(location =>
                       Abrir no Maps
                     </a>
                     </div>
+                    
                   </Popup>
+                  
                 </Marker>
               );
+              
             })}
+            
+{userPosition && (
+  <Marker
+    position={[userPosition.lat, userPosition.lng]}
+    icon={userIcon}
+  >
+    <Popup>Você está aqui</Popup>
+  </Marker>
+)}
+            
 
                   <MapInstanceHandler onMapReady={setMapInstance} />
                 </MapContainer>
