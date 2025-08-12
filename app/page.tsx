@@ -195,7 +195,7 @@ export default function HomePage() {
 
     <div className="min-h-screen bg-gradient-to-br from-[#017DB9] via-white to-[#007a73]">
     {/* Header */}
-      <Navbar />
+      
 
       {/* imagem como banner com efeito fade na parte inferior */}
       <div className="relative w-full h-[400px] overflow-hidden">

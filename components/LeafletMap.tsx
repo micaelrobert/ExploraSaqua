@@ -21,6 +21,15 @@ const selectedIcon = new L.Icon({
   shadowSize: [41, 41],
 })
 
+const userIcon = new L.Icon({
+  iconUrl: '/person-icon.png',    // Caminho relativo dentro da pasta public
+  iconSize: [32, 32],             // Tamanho em pixels do ícone no mapa (ajuste para ficar pequeno)
+  iconAnchor: [16, 32],           // Ponto do ícone que será posicionado na coordenada [lat,lng] (16 = metade da largura, 32 = base do ícone)
+  popupAnchor: [0, -32],          // Ponto relativo para o popup abrir (para ficar acima do ícone)
+  shadowUrl: '',                  // Se não tiver sombra, deixe vazio
+  shadowSize: [0, 0],
+});
+
 const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), {
   ssr: false,
 })

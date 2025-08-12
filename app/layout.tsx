@@ -2,7 +2,7 @@ import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
+import { Navbar } from "./navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: "ExploreSaquá",
     description:
       "Descubra os melhores lugares de Saquarema com nosso guia completo para moradores e visitantes",
-    url: "https://explora-saqua.vercel.app/",
+    url: "https://explora-saqua.vercel.app/", /* change link according to domain */
     siteName: "ExploreSaquá",
     images: [
       {
@@ -29,15 +29,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>
-          {children}
+      <body className="bg-white">
+        <Navbar /> {/* visible on all pages */}
+        <main>{children}</main>
       </body>
     </html>
   );
