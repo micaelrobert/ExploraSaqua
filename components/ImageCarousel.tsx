@@ -24,7 +24,9 @@ export default function ImageCarousel() {
   useEffect(() => {
     resetTimeout();
     timeoutRef.current = setTimeout(() => {
-      setCurrent((prevIndex) => (prevIndex === slides.length - 1 ? 0 : prevIndex + 1));
+      setCurrent((prevIndex) =>
+        prevIndex === slides.length - 1 ? 0 : prevIndex + 1
+      );
     }, 5000); // Changed to 5 seconds for a better rhythm
 
     return () => resetTimeout();
@@ -43,7 +45,7 @@ export default function ImageCarousel() {
   return (
     // 'group' allows child elements to change style on hover (e.g., making arrows visible)
     // 'aspect-video' creates a responsive 16:9 horizontal shape
-    <div className="relative group w-full max-w-6xl mx-auto h-[200px] md:h-[270px] overflow-hidden rounded-3xl shadow-xl">
+    <div className="relative group w-[90%] max-w-6xl mx-auto h-[200px] md:h-[270px] overflow-hidden rounded-3xl shadow-xl">
       <div className="w-full h-full flex transition-transform ease-out duration-500">
         {/* Render all images, but only the active one is visible. This allows for smooth transitions. */}
         {slides.map((slide, i) => (
