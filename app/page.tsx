@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowUp } from "lucide-react"; 
 import Head from "next/head";
+import ImageCarousel from "../components/ImageCarousel"
 import { Navbar } from "./navbar"
 import {
   UtensilsCrossed,
@@ -193,23 +194,15 @@ export default function HomePage() {
     </Head>
 
 
-    <div className="min-h-screen bg-gradient-to-br from-[#017DB9] via-white to-[#007a73]">
+ <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-100 to-white pt-12">
     {/* Header */}
       
 
       {/* imagem como banner com efeito fade na parte inferior */}
-      <div className="relative w-full h-[400px] overflow-hidden">
-        <Image
-          src="/saquarema.png"
-          alt="Vista de Saquarema"
-            width={1536} 
-            height={1024}
-          className="w-full h-full object-cover opacity-80 md:opacity-100 fade-bottom-mask"
-        />
-      </div>
+  <ImageCarousel />
 
       {/* Hero Section */}
-<section className="container mx-auto px-4 py-12 md:py-20 relative z-10 -mt-[400px] md:-mt-[210px]">
+<section className="container mx-auto px-4 py-12 md:py-20 relative z-10 -mt-[1px] md:-mt-[1px]">
 
 
 

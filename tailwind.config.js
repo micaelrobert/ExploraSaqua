@@ -50,6 +50,10 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+         screens: {
+        'teste': '1400px', 
+        'tablet': '900px', // adiciona um novo breakpoint personalizado chamado 'tablet'
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

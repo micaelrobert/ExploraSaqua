@@ -12,7 +12,7 @@ export function Navbar() {
       <div className="relative container mx-auto px-4 py-3 sm:py-4 md:py-5 flex items-center justify-between">
 
         {/* Logo + Links (Desktop) */}
-        <div className="hidden md:flex items-center gap-6 relative">
+        <div className="hidden teste:flex items-center gap-">
           <Link href="https://www.saquarema.rj.gov.br/">
             <img
               src="/logo2sq.png"
@@ -21,7 +21,7 @@ export function Navbar() {
             />
           </Link>
 
-          <nav className="flex items-center gap-6 pl-[270px] z-20 ml-auto">
+          <nav className="flex items-center gap-6 pl-[220px] z-20 ml-auto">
 
              <Link href="/" className="text-gray-700 hover:text-[#017DB9] transition-colors">
               Home
@@ -52,7 +52,7 @@ export function Navbar() {
         </Link>
 
         {/* Ícones - visíveis apenas no desktop */}
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="hidden teste:flex items-center space-x-4">
           <a
             href="https://www.instagram.com/prefeiturasaquarema/?hl=en"
             target="_blank"
@@ -76,7 +76,7 @@ export function Navbar() {
 
         {/* Botão hamburguer - sempre visível */}
         <button
-          className="md:hidden text-gray-700 focus:outline-none z-50"
+          className="teste:hidden text-gray-700 focus:outline-none z-50"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Abrir menu"
         >
@@ -86,7 +86,7 @@ export function Navbar() {
 
 {/* Menu Mobile */}
 {isOpen && (
-  <div className="md:hidden absolute top-full left-0 w-full bg-white border-t border-blue-100 shadow-xl py-4 z-40 rounded-b-lg animate-slide-down">
+  <div className="teste:hidden absolute top-full left-0 w-full bg-white border-t border-blue-100 shadow-xl py-4 z-40 rounded-b-lg animate-slide-down">
     <nav className="flex flex-col space-y-4 px-6">
       
        <Link
