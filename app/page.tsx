@@ -1,12 +1,12 @@
 "use client";
-import Image from 'next/image';
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowUp } from "lucide-react"; 
+import { ArrowUp } from "lucide-react";
 import Head from "next/head";
-import ImageCarousel from "../components/ImageCarousel"
-import { Navbar } from "./navbar"
+import ImageCarousel from "../components/ImageCarousel";
+import { Navbar } from "./navbar";
 import {
   UtensilsCrossed,
   MapPin,
@@ -19,16 +19,15 @@ import {
   Calendar,
   Building,
   Waves,
-  Heart, 
-  BriefcaseBusiness, 
-  Ambulance, 
-  Volleyball, 
+  Heart,
+  BriefcaseBusiness,
+  Ambulance,
+  Volleyball,
   Cherry,
   Search,
-  PhoneCall
-  
+  PhoneCall,
 } from "lucide-react";
-export {categories}
+export { categories };
 const categories = [
   {
     id: "restaurantes",
@@ -141,8 +140,7 @@ const categories = [
     icon: Cherry,
     color: "from-green-400 to-lime-300",
     description: "Serviços de saúde e bem-estar",
-  }
-  
+  },
 ];
 
 export default function HomePage() {
@@ -183,138 +181,153 @@ export default function HomePage() {
 
   return (
     <>
-    <Head>
-      <title>ExploreSaquá - Descubra Saquarema</title>
-      <meta name="description" content="Seu guia completo para explorar os melhores lugares, serviços e atrações de Saquarema." />
-      <meta property="og:image" content="/logo2sq.png" />
-      <meta property="og:title" content="ExploreSaquá" />
-      <meta property="og:description" content="Descubra os encantos de Saquarema de forma gratuita." />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://explora-saqua.vercel.app/" />
-    </Head>
+      <Head>
+        <title>ExploreSaquá - Descubra Saquarema</title>
+        <meta
+          name="description"
+          content="Seu guia completo para explorar os melhores lugares, serviços e atrações de Saquarema."
+        />
+        <meta property="og:image" content="/logo2sq.png" />
+        <meta property="og:title" content="ExploreSaquá" />
+        <meta
+          property="og:description"
+          content="Descubra os encantos de Saquarema de forma gratuita."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://explora-saqua.vercel.app/" />
+      </Head>
 
+      <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-100 to-white pt-12">
+        {/* Header */}
 
- <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-100 to-white pt-12">
-    {/* Header */}
-      
+        {/* imagem como banner com efeito fade na parte inferior */}
+        <Image
+          src="/logo2sq.png"
+          alt="Logo Prefeitura de Saquarema"
+          width={2660}
+          height={898}
+          className=" md:hidden block mx-auto h-20 w-auto mb-5"
+        />
+        <Image
+          src="/LogoExplora.png"
+          alt="Logo ExploraSaquá"
+          width={2660}
+          height={898}
+          className=" hidden md:block mx-auto h-28 w-auto mb-5"
+        />
+        <ImageCarousel />
 
-      {/* imagem como banner com efeito fade na parte inferior */}
-  <ImageCarousel />
-
-      {/* Hero Section */}
-<section className="container mx-auto px-4 py-12 md:py-20 relative z-10 -mt-[1px] md:-mt-[1px]">
-
-
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-<Image
-  src="/logo2sq.png"
-  alt="Logo ExploreSaquá"
-  width={2660} 
-  height={898} 
-  className="block md:hidden mx-auto h-24 w-auto mb-20"
-/>
-          <h2 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
-            O que você quer{" "}
-            <span className="bg-gradient-to-r from-[#017DB9] to-[#007a73] bg-clip-text text-transparent">
-              explorar
-            </span>{" "}
-            hoje?
-          </h2>
-          <p className="text-xl font-bold text-gray-700 md:text-gray-600 max-w-2xl mx-auto">
-            Descubra os melhores lugares de Saquarema com nosso guia completo
-            para moradores e visitantes
-          </p>
-          <div className="max-w-md mx-auto mt-8">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-            <input
-              type="text"
-              placeholder="Pesquisar por categoria..."
-              className="
+        {/* Hero Section */}
+        <section className="container mx-auto px-4 py-12 md:py-20 relative z-10 -mt-[1px] md:-mt-[1px]">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
+              O que você quer{" "}
+              <span className="bg-gradient-to-r from-[#017DB9] to-[#007a73] bg-clip-text text-transparent">
+                explorar
+              </span>{" "}
+              hoje?
+            </h2>
+            <p className="text-xl font-bold text-gray-700 md:text-gray-600 max-w-2xl mx-auto">
+              Descubra os melhores lugares de Saquarema com nosso guia completo
+              para moradores e visitantes
+            </p>
+            <div className="max-w-md mx-auto mt-8">
+              <div className="relative">
+                <Search
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                  size={20}
+                />
+                <input
+                  type="text"
+                  placeholder="Pesquisar por categoria..."
+                  className="
                 w-full pl-12 pr-4 py-3
                 rounded-2xl border border-gray-200 bg-white shadow-sm
                 focus:outline-none focus:ring-2 focus:ring-[#017DB9] focus:border-transparent
                 transition-all duration-300 placeholder-gray-400 text-sm
                 hover:shadow-md
               "
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-        </div>
-        </motion.div>
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </div>
+          </motion.div>
 
-        {/* Categories Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 max-w-7xl mx-auto">
-         {categories
-          .filter((category) =>
-            category.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            category.description.toLowerCase().includes(searchTerm.toLowerCase())
-          )
-          .map((category, index) => {
-            const Icon = category.icon;
-            return (
-              <motion.div
-                key={category.id}
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={
-                  index < visibleCards
-                    ? { opacity: 1, y: 0, scale: 1 }
-                    : { opacity: 0, y: 50, scale: 0.9 }
-                }
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1,
-                  type: "spring",
-                  stiffness: 100,
-                }}
-              >
-                <Link href={`/categoria/${category.id}`}>
-                 <div className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02]">
+          {/* Categories Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 max-w-7xl mx-auto">
+            {categories
+              .filter(
+                (category) =>
+                  category.title
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) ||
+                  category.description
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+              )
+              .map((category, index) => {
+                const Icon = category.icon;
+                return (
+                  <motion.div
+                    key={category.id}
+                    initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                    animate={
+                      index < visibleCards
+                        ? { opacity: 1, y: 0, scale: 1 }
+                        : { opacity: 0, y: 50, scale: 0.9 }
+                    }
+                    transition={{
+                      duration: 0.5,
+                      delay: index * 0.1,
+                      type: "spring",
+                      stiffness: 100,
+                    }}
+                  >
+                    <Link href={`/categoria/${category.id}`}>
+                      <div className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02]">
+                        <div
+                          className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
+                        />
 
+                        <div className="p-6">
+                          <div
+                            className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${category.color} mb-4 group-hover:scale-125 group-hover:brightness-110 transition-transform duration-300`}
+                          >
+                            <Icon className="w-6 h-6 text-white" />
+                          </div>
 
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
-                    />
+                          <h3 className="text-lg font-semibold text-gray-800 mb-2 group-hover:text-gray-900">
+                            {category.title}
+                          </h3>
 
-                    <div className="p-6">
-                     <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${category.color} mb-4 group-hover:scale-125 group-hover:brightness-110 transition-transform duration-300`}>
+                          <p className="text-gray-600 text-sm">
+                            {category.description}
+                          </p>
+                        </div>
 
-                        <Icon className="w-6 h-6 text-white" />
+                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent group-hover:via-blue-400 transition-all duration-300" />
                       </div>
-
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2 group-hover:text-gray-900">
-                        {category.title}
-                      </h3>
-
-                      <p className="text-gray-600 text-sm">
-                        {category.description}
-                      </p>
-                    </div>
-
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent group-hover:via-blue-400 transition-all duration-300" />
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </div>
-      </section>
-       {/* Botão "Voltar ao topo" */}
-      {showScrollTop && (
-        <motion.button
-          type="button"
-          aria-label="Voltar ao topo"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="
+                    </Link>
+                  </motion.div>
+                );
+              })}
+          </div>
+        </section>
+        {/* Botão "Voltar ao topo" */}
+        {showScrollTop && (
+          <motion.button
+            type="button"
+            aria-label="Voltar ao topo"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="
             fixed bottom-6 left-6 z-50 
             bg-[#017DB9] hover:bg-blue-800 
             text-white font-semibold font-sans 
@@ -326,32 +339,34 @@ export default function HomePage() {
             select-none
             cursor-pointer
           "
-        >
-          
-          <ArrowUp size={20} />
-        </motion.button>
-      )}
+          >
+            <ArrowUp size={20} />
+          </motion.button>
+        )}
 
-      {/* Footer */}
-      <footer className="bg-gray-50 border-t border-gray-200 mt-20">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              ExploreSaquá
-            </h3>
-            <p className="text-gray-600 mb-4"> {/* mb-4 aqui para espaçar o parágrafo de descrição */}
-              Seu guia completo para descobrir o melhor de Saquarema
-            </p>
-            {/* Linha horizontal sutil */}
-            <hr className="w-16 mx-auto border-gray-300 mb-4" /> {/*  uma linha divisória curta e centralizada */}
-            <p className="text-gray-500 text-sm"> 
-              © Desenvolvido por <span className="font-medium text-gray-600">Micael Robert</span> 
-            </p>
+        {/* Footer */}
+        <footer className="bg-gray-50 border-t border-gray-200 mt-20">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                ExploreSaquá
+              </h3>
+              <p className="text-gray-600 mb-4">
+                {" "}
+                {/* mb-4 aqui para espaçar o parágrafo de descrição */}
+                Seu guia completo para descobrir o melhor de Saquarema
+              </p>
+              {/* Linha horizontal sutil */}
+              <hr className="w-16 mx-auto border-gray-300 mb-4" />{" "}
+              {/*  uma linha divisória curta e centralizada */}
+              <p className="text-gray-500 text-sm">
+                © Desenvolvido por{" "}
+                <span className="font-medium text-gray-600">Micael Robert</span>
+              </p>
+            </div>
           </div>
-        </div>
-      </footer>
-    </div>
+        </footer>
+      </div>
     </>
   );
-  
 }
