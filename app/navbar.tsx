@@ -13,13 +13,7 @@ export function Navbar() {
       <div className="relative container mx-auto px-4 py-3 sm:py-4 md:py-5 flex items-center justify-between">
         {/* Logo + Links (Desktop) */}
         <div className="hidden teste:flex items-center gap-">
-          <Link href="https://www.saquarema.rj.gov.br/">
-            <img
-              src="/logo2sq.png"
-              alt="Logo Prefeitura de Saquarema"
-              className="h-16 lg:h-19 w-auto absolute left-0 top-1/2 -translate-y-1/2 cursor-pointer z-30"
-            />
-          </Link>
+          <Link href="https://www.saquarema.rj.gov.br/"></Link>
 
           <nav className="flex items-center gap-6 pl-[220px] z-20 ml-auto">
             <Link
@@ -42,6 +36,13 @@ export function Navbar() {
             </Link>
           </nav>
         </div>
+        <Image
+          src="/logo2sq.png"
+          alt="Logo Prefeitura de Saquarema"
+          width={2660}
+          height={898}
+          className="hidden md:block md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 milecem:left-4 milecem:translate-x-0 h-16 w-auto cursor-pointer"
+        />
 
         {/* Título centralizado */}
         <Link href="/">
@@ -56,7 +57,7 @@ export function Navbar() {
         </Link>
 
         {/* Ícones - visíveis apenas no desktop */}
-        <div className="hidden teste:flex items-center space-x-4">
+        <div className="hidden :fltesteex items-center space-x-4">
           <a
             href="https://www.instagram.com/prefeiturasaquarema/?hl=en"
             target="_blank"
