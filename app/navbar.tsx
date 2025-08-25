@@ -10,7 +10,7 @@ export function Navbar() {
 
   return (
     <header className="bg-white/90 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-50 shadow-md">
-      <div className="relative container mx-auto px-4 py-3 sm:py-4 md:py-5 flex items-center justify-between">
+      <div className="relative container mx-auto px-4 py-1 sm:py-1 md:py-5 flex items-center justify-between">
         {/* Logo + Links (Desktop) */}
         <div className="hidden teste:flex items-center gap-">
           <Link href="https://www.saquarema.rj.gov.br/"></Link>
@@ -41,7 +41,7 @@ export function Navbar() {
           alt="Logo Prefeitura de Saquarema"
           width={2660}
           height={898}
-          className="hidden md:block md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 milecem:left-4 milecem:translate-x-0 h-16 w-auto cursor-pointer"
+          className="block mx-auto w-auto h-10 sm:h-14 md:h-16 md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 desktop:left-8 desktop:translate-x-0 cursor-pointer"
         />
 
         {/* Título centralizado */}
@@ -51,7 +51,7 @@ export function Navbar() {
             alt="Logo ExploraSaquá"
             width={2660}
             height={898}
-            className=" absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-12 w-auto
+            className=" hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-12 w-auto
              md:hidden"
           />
         </Link>

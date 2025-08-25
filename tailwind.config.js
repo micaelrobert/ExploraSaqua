@@ -54,7 +54,7 @@ module.exports = {
         teste: "1400px",
         tablet: "900px", // adiciona um novo breakpoint personalizado chamado 'tablet'
         milecem: "1100px",
-        qq: "9000200px",
+        desktop: "1400px",
       },
     },
   },

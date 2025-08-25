@@ -206,14 +206,14 @@ export default function HomePage() {
           alt="Logo Prefeitura de Saquarema"
           width={2660}
           height={898}
-          className=" md:hidden block mx-auto h-20 w-auto mb-5"
+          className=" hidden md:hidden block mx-auto h-20 w-auto mb-5"
         />
         <Image
           src="/LogoExplora.png"
           alt="Logo ExploraSaquá"
           width={2660}
           height={898}
-          className=" hidden md:block mx-auto h-20 w-auto mb-5"
+          className="md:block mx-auto h-10 sm:h-12 w-auto mb-5 milecem:h-16"
         />
         <ImageCarousel />
 
