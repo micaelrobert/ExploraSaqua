@@ -197,7 +197,7 @@ export default function HomePage() {
         <meta property="og:url" content="https://explora-saqua.vercel.app/" />
       </Head>
 
-      <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-100 to-white pt-12">
+      <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-100 to-white pt-8">
         {/* Header */}
 
         {/* imagem como banner com efeito fade na parte inferior */}
@@ -213,17 +213,17 @@ export default function HomePage() {
           alt="Logo ExploraSaquá"
           width={2660}
           height={898}
-          className=" hidden md:block mx-auto h-28 w-auto mb-5"
+          className=" hidden md:block mx-auto h-20 w-auto mb-5"
         />
         <ImageCarousel />
 
         {/* Hero Section */}
-        <section className="container mx-auto px-4 py-12 md:py-20 relative z-10 -mt-[1px] md:-mt-[1px]">
+        <section className="container mx-auto px-4 py-8 md:py-8 relative z-10 -mt-[1px] md:-mt-[1px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            className="text-center mb-10"
           >
             <h2 className="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
               O que você quer{" "}
@@ -236,7 +236,7 @@ export default function HomePage() {
               Descubra os melhores lugares de Saquarema com nosso guia completo
               para moradores e visitantes
             </p>
-            <div className="max-w-md mx-auto mt-8">
+            <div className="max-w-md mx-auto mt-6">
               <div className="relative">
                 <Search
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
