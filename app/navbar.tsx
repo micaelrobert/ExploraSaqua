@@ -1,9 +1,98 @@
 "use client";
 
+import { MotionConfig, motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
-import { Instagram, Globe, Menu, X } from "lucide-react";
+import { Instagram, Globe } from "lucide-react";
+
+// VARIANTS para a animação do botão
+const VARIANTS = {
+  top: {
+    open: {
+      rotate: ["0deg", "0deg", "45deg"],
+      top: ["35%", "50%", "50%"],
+    },
+    closed: {
+      rotate: ["45deg", "0deg", "0deg"],
+      top: ["50%", "50%", "35%"],
+    },
+  },
+  middle: {
+    open: {
+      rotate: ["0deg", "0deg", "-45deg"],
+    },
+    closed: {
+      rotate: ["-45deg", "0deg", "0deg"],
+    },
+  },
+  bottom: {
+    open: {
+      rotate: ["0deg", "0deg", "45deg"],
+      bottom: ["35%", "50%", "50%"],
+      left: "50%",
+    },
+    closed: {
+      rotate: ["45deg", "0deg", "0deg"],
+      bottom: ["50%", "50%", "35%"],
+      left: "calc(50% + 10px)",
+    },
+  },
+};
+
+// Componente do botão animado
+type AnimatedHamburgerButtonProps = {
+  active: boolean;
+  onClick: () => void;
+};
+
+const AnimatedHamburgerButton = ({
+  active,
+  onClick,
+}: AnimatedHamburgerButtonProps) => {
+  return (
+    <MotionConfig
+      transition={{
+        duration: 0.5,
+        ease: "easeInOut",
+      }}
+    >
+      <motion.button
+        initial={false}
+        animate={active ? "open" : "closed"}
+        onClick={onClick}
+        // DIMINUÍDO: de h-14 w-14 para h-12 w-12
+        className="relative h-12 w-12 transition-colors teste:hidden focus:outline-none z-50"
+        aria-label="Abrir menu"
+      >
+        <motion.span
+          variants={VARIANTS.top}
+          // DIMINUÍDO: de w-8 para w-6
+          className="absolute h-1 w-6 bg-gray-700"
+          style={{ y: "-50%", left: "50%", x: "-50%", top: "35%" }}
+        />
+        <motion.span
+          variants={VARIANTS.middle}
+          // DIMINUÍDO: de w-8 para w-6
+          className="absolute h-1 w-6 bg-gray-700"
+          style={{ left: "50%", x: "-50%", top: "50%", y: "-50%" }}
+        />
+        <motion.span
+          variants={VARIANTS.bottom}
+          // DIMINUÍDO: de w-4 para w-3
+          className="absolute h-1 w-3 bg-gray-700"
+          style={{
+            x: "-50%",
+            y: "50%",
+            bottom: "35%",
+            // AJUSTADO: de 8px para 6px para manter a proporção
+            left: "calc(50% + 6px)",
+          }}
+        />
+      </motion.button>
+    </MotionConfig>
+  );
+};
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,7 +141,7 @@ export function Navbar() {
             width={2660}
             height={898}
             className=" hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-12 w-auto
-             md:hidden"
+              md:hidden"
           />
         </Link>
 
@@ -79,14 +168,11 @@ export function Navbar() {
           </a>
         </div>
 
-        {/* Botão hamburguer - sempre visível */}
-        <button
-          className="teste:hidden text-gray-700 focus:outline-none z-50"
+        {/* Botão animado com o novo tamanho */}
+        <AnimatedHamburgerButton
+          active={isOpen}
           onClick={() => setIsOpen(!isOpen)}
-          aria-label="Abrir menu"
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+        />
       </div>
 
       {/* Menu Mobile */}
