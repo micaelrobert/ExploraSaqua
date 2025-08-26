@@ -101,37 +101,37 @@ export function Navbar() {
     <header className="bg-white/90 backdrop-blur-sm border-b border-blue-100 sticky top-0 z-50 shadow-md">
       <div className="relative container mx-auto px-4 py-1 sm:py-1 md:py-5 flex items-center justify-between">
         {/* Logo + Links (Desktop) */}
-        <div className="hidden teste:flex items-center gap-">
-          <Link href="https://www.saquarema.rj.gov.br/"></Link>
-
+        <div className="teste:flex items-center gap-">
+          <Link href="https://www.saquarema.rj.gov.br/">
+            <Image
+              src="/logo2sq.png"
+              alt="Logo Prefeitura de Saquarema"
+              width={2660}
+              height={898}
+              className="px-auto mx-auto w-auto h-10 sm:h-14 md:h-16 md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 desktop:left-8 desktop:translate-x-0 cursor-pointer"
+            />
+          </Link>
           <nav className="flex items-center gap-6 pl-[220px] z-20 ml-auto">
             <Link
               href="/"
-              className="text-gray-700 hover:text-[#017DB9] transition-colors"
+              className="hidden teste:block text-gray-700 hover:text-[#017DB9] transition-colors"
             >
               Home
             </Link>
             <Link
               href="/sobre"
-              className="text-gray-700 hover:text-[#017DB9] transition-colors"
+              className="hidden teste:block text-gray-700 hover:text-[#017DB9] transition-colors"
             >
               Sobre o Projeto
             </Link>
             <Link
               href="/contato"
-              className="text-gray-700 hover:text-[#017DB9] transition-colors"
+              className="hidden teste:block text-gray-700 hover:text-[#017DB9] transition-colors"
             >
               Contato
             </Link>
           </nav>
         </div>
-        <Image
-          src="/logo2sq.png"
-          alt="Logo Prefeitura de Saquarema"
-          width={2660}
-          height={898}
-          className="block mx-auto w-auto h-10 sm:h-14 md:h-16 md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 desktop:left-8 desktop:translate-x-0 cursor-pointer"
-        />
 
         {/* Título centralizado */}
         <Link href="/">
@@ -146,7 +146,7 @@ export function Navbar() {
         </Link>
 
         {/* Ícones - visíveis apenas no desktop */}
-        <div className="hidden milecem:flex flex-row items-center space-x-4">
+        <div className="hidden teste:flex flex-row items-center space-x-4">
           <a
             href="https://www.instagram.com/prefeiturasaquarema/?hl=en"
             target="_blank"
