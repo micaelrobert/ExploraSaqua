@@ -146,7 +146,7 @@ export function Navbar() {
         </Link>
 
         {/* Ícones - visíveis apenas no desktop */}
-        <div className="hidden :fltesteex items-center space-x-4">
+        <div className="hidden milecem:flex flex-row items-center space-x-4">
           <a
             href="https://www.instagram.com/prefeiturasaquarema/?hl=en"
             target="_blank"
