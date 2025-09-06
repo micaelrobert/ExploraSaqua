@@ -6,7 +6,7 @@ import {
   ArrowLeft, Clock, MapPin, Phone, Globe, Search
 } from "lucide-react"
 import dynamic from "next/dynamic"
-import { db } from "../../firebase" 
+import { db } from "../../../data/firebase" 
 import { collection, getDocs, query, where } from "firebase/firestore"
 import { useMap } from "react-leaflet"
 import { categories } from "../../page"; 
