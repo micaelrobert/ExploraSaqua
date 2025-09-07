@@ -6,7 +6,6 @@ import Link from "next/link";
 import { ArrowUp } from "lucide-react";
 import Head from "next/head";
 import ImageCarousel from "../components/ImageCarousel";
-import { Navbar } from "./navbar";
 import {
   UtensilsCrossed,
   MapPin,
@@ -27,7 +26,11 @@ import {
   Search,
   PhoneCall,
 } from "lucide-react";
+
+
 export { categories };
+
+
 const categories = [
   {
     id: "restaurantes",
@@ -148,7 +151,6 @@ export default function HomePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Animação progressiva dos cards
   useEffect(() => {
     const timer = setInterval(() => {
       setVisibleCards((prev) => {
@@ -162,7 +164,6 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, []);
 
-  // Verificar se chegou ao fim da página
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.innerHeight + window.scrollY;
@@ -200,7 +201,6 @@ export default function HomePage() {
       <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-100 to-white pt-8">
         {/* Header */}
 
-        {/* imagem como banner com efeito fade na parte inferior */}
         <Image
           src="/logo2sq.png"
           alt="Logo Prefeitura de Saquarema"
@@ -217,7 +217,6 @@ export default function HomePage() {
         />
         <ImageCarousel />
 
-        {/* Hero Section */}
         <section className="container mx-auto px-4 py-8 md:py-8 relative z-10 -mt-[1px] md:-mt-[1px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -319,7 +318,6 @@ export default function HomePage() {
               })}
           </div>
         </section>
-        {/* Botão "Voltar ao topo" */}
         {showScrollTop && (
           <motion.button
             type="button"
@@ -353,12 +351,9 @@ export default function HomePage() {
               </h3>
               <p className="text-gray-600 mb-4">
                 {" "}
-                {/* mb-4 aqui para espaçar o parágrafo de descrição */}
                 Seu guia completo para descobrir o melhor de Saquarema
               </p>
-              {/* Linha horizontal sutil */}
               <hr className="w-16 mx-auto border-gray-300 mb-4" />{" "}
-              {/*  uma linha divisória curta e centralizada */}
               <p className="text-gray-500 text-sm">
                 © Desenvolvido por{" "}
                 <span className="font-medium text-gray-600">Micael Robert</span>

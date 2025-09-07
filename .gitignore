@@ -20,7 +20,7 @@ yarn-error.log*
 .env*
 
 # local env files
-/data/firebase.ts
+/data/firebaselocal.ts
 
 # vercel
 .vercel

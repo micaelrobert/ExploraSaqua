@@ -6,7 +6,7 @@ import {
   ArrowLeft, Clock, MapPin, Phone, Globe, Search
 } from "lucide-react"
 import dynamic from "next/dynamic"
-import { db } from "../../../data/firebase" 
+import { db } from "../../../data/firebase"  //CHANGE WAY TO IMPORT FIREBASE WITH ENV VARIABLES
 import { collection, getDocs, query, where } from "firebase/firestore"
 import { useMap } from "react-leaflet"
 import { categories } from "../../page"; 

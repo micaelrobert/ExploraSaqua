@@ -1,9 +1,9 @@
-/* app/globals.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Variáveis e estilos globais */
+
 @layer base {
   :root {
     --background: 0 0% 100%;
